@@ -1,6 +1,6 @@
-#include "mpl/cons.h"
+#include "mpl_test.h"
 
-#include <type_traits>
+#include "mpl/cons.h"
 
 namespace {
 
@@ -10,8 +10,8 @@ using _A = mpl::cons<int, bool>;
 using _B = mpl::car<_A>;
 using _C = mpl::cdr<_A>;
 
-static_assert(std::is_same<int, _B>::value, "");
-static_assert(std::is_same<bool, _C>::value, "");
+ASSERT_SAME(_B, int);
+ASSERT_SAME(_C, bool);
 
 } // namespace A
 
@@ -22,9 +22,9 @@ using _B = mpl::car<_A>;
 using _C = mpl::car<mpl::cdr<_A>>;
 using _D = mpl::cdr<mpl::cdr<_A>>;
 
-static_assert(std::is_same<int, _B>::value, "");
-static_assert(std::is_same<bool, _C>::value, "");
-static_assert(std::is_same<float, _D>::value, "");
+ASSERT_SAME(_B, int);
+ASSERT_SAME(_C, bool);
+ASSERT_SAME(_D, float);
 
 } // namespace B
 
@@ -36,10 +36,10 @@ using _C = mpl::cdr<mpl::car<_A>>;
 using _D = mpl::car<mpl::cdr<_A>>;
 using _E = mpl::cdr<mpl::cdr<_A>>;
 
-static_assert(std::is_same<int, _B>::value, "");
-static_assert(std::is_same<bool, _C>::value, "");
-static_assert(std::is_same<float, _D>::value, "");
-static_assert(std::is_same<double, _E>::value, "");
+ASSERT_SAME(_B, int);
+ASSERT_SAME(_C, bool);
+ASSERT_SAME(_D, float);
+ASSERT_SAME(_E, double);
 
 } // namespace C
 

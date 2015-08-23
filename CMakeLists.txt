@@ -6,6 +6,7 @@ add_library(mpl STATIC
     src/include/mpl/cons.h
     src/include/mpl/list.h
 
+    src/test/mpl_test.h
     src/test/cons.cpp
     src/test/list.cpp
 )
