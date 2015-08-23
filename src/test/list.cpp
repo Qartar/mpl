@@ -172,12 +172,12 @@ namespace index {
 //-----------------------------------------------------------------------------
 namespace A {
 
-using _E = mpl::index<0, extend::D::_D>;
-using _F = mpl::index<1, extend::D::_D>;
-using _G = mpl::index<2, extend::D::_D>;
-using _H = mpl::index<3, extend::D::_D>;
-using _I = mpl::index<4, extend::D::_D>;
-using _J = mpl::index<5, extend::D::_D>;
+using _E = mpl::index<extend::D::_D, 0>;
+using _F = mpl::index<extend::D::_D, 1>;
+using _G = mpl::index<extend::D::_D, 2>;
+using _H = mpl::index<extend::D::_D, 3>;
+using _I = mpl::index<extend::D::_D, 4>;
+using _J = mpl::index<extend::D::_D, 5>;
 
 ASSERT_SAME(_E, extend::D::_E);
 ASSERT_SAME(_F, extend::D::_F);
