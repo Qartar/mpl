@@ -90,6 +90,14 @@ template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
+ * append
+ *
+ * Metafunction for appending one or more types to an s-expression list metatype.
+ */
+template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targs...>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
  * index
  *
  * Metafunction for retrieving the n-th type from an s-expression list metatype.

@@ -137,4 +137,30 @@ ASSERT_SAME(_J, G::_J);
 
 } // namespace H
 
+namespace I {
+
+using _A = mpl::list<int>;
+using _B = mpl::append<_A, bool>;
+using _C = mpl::index<0, _B>;
+using _D = mpl::index<1, _B>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+
+} // namespace I
+
+namespace J {
+
+using _A = mpl::list<int>;
+using _B = mpl::append<_A, bool, float>;
+using _C = mpl::index<0, _B>;
+using _D = mpl::index<1, _B>;
+using _E = mpl::index<2, _B>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+
+} // namespace J
+
 } // anonymous namespace
