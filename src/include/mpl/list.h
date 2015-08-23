@@ -128,8 +128,8 @@ template<typename... _Targs> using list = typename detail::fn_list<_Targs...>::t
 /**
  * extend
  *
- * Metafunction for concatenating two or more s-expression list metatypes into
- * a single s-expression list metatype.
+ * Metafunction for concatenating two or more `list` metatypes into a single
+ * `list` metatype.
  */
 template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...>::type;
 
@@ -137,7 +137,7 @@ template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...
 /**
  * append
  *
- * Metafunction for appending one or more types to an s-expression list metatype.
+ * Metafunction for appending one or more type elements onto a `list` metatype.
  */
 template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targs...>>;
 
@@ -145,7 +145,7 @@ template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targ
 /**
  * insert
  *
- * Metafunction for inserting one or more types into an s-expression list metatype.
+ * Metafunction for inserting one or more type elements into a `list` metatype.
  */
 template<typename _Tx, int _Ty, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Targs...>::type;
 
@@ -153,7 +153,7 @@ template<typename _Tx, int _Ty, typename... _Targs> using insert = typename deta
 /**
  * remove
  *
- * Metafunction for removing a type element by index from an s-expression list metatype.
+ * Metafunction for removing a type element by index from a `list` metatype.
  */
 template<typename _Tx, int _Ty> using remove = typename detail::fn_remove<_Tx, _Ty>::type;
 
@@ -161,7 +161,7 @@ template<typename _Tx, int _Ty> using remove = typename detail::fn_remove<_Tx, _
 /**
  * index
  *
- * Metafunction for retrieving the n-th type from an s-expression list metatype.
+ * Metafunction for retrieving the n-th type element from a `list` metatype.
  */
 template<typename _Tx, int _Ty> using index = typename detail::fn_index<_Tx, _Ty>::type;
 
