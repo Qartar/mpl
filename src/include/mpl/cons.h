@@ -16,19 +16,19 @@ namespace detail {
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `car` metafunction
-template<typename _Tx> class fn_car;
+template<typename _Tx> struct fn_car;
 
 template<typename _Tx, typename _Ty>
-class fn_car<cons<_Tx, _Ty>> {
+struct fn_car<cons<_Tx, _Ty>> {
     using type = _Tx;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `cdr` metafunction
-template<typename _Tx> class fn_cdr;
+template<typename _Tx> struct fn_cdr;
 
 template <typename _Tx, typename _Ty>
-class fn_cdr<cons<_Tx, _Ty>> {
+struct fn_cdr<cons<_Tx, _Ty>> {
     using type = _Ty;
 };
 
