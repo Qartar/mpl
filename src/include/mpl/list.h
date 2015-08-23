@@ -74,6 +74,26 @@ struct fn_insert<nil, _Tx, _Targs...> {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `remove` metafunction
+template<typename _Tx, int _Ty> struct fn_remove;
+
+template<typename _Tx, typename _Ty, int _Tz>
+struct fn_remove<cons<_Tx, _Ty>, _Tz> {
+    using type = cons < _Tx, typename fn_remove < _Ty, _Tz - 1 >::type >;
+};
+
+template<typename _Tx, typename _Ty>
+struct fn_remove<cons<_Tx, _Ty>, 0> {
+    using type = _Ty;
+};
+
+template<int _Tx>
+struct fn_remove<nil, _Tx> {
+    static_assert(_Tx < 0, "Index out of bounds.");
+    using type = nil;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `index` metafunction
 template<typename _Tx, int _Ty> struct fn_index;
 
@@ -128,6 +148,14 @@ template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targ
  * Metafunction for inserting one or more types into an s-expression list metatype.
  */
 template<typename _Tx, int _Ty, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Targs...>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * remove
+ *
+ * Metafunction for removing a type element by index from an s-expression list metatype.
+ */
+template<typename _Tx, int _Ty> using remove = typename detail::fn_remove<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**

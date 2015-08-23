@@ -283,6 +283,78 @@ ASSERT_SAME(_G, mpl::nil);
 } // namespace insert
 
 ///////////////////////////////////////////////////////////////////////////////
+namespace remove {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::list<int, bool, float, double>;
+using _B = mpl::remove<_A, 0>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, bool);
+ASSERT_SAME(_D, float);
+ASSERT_SAME(_E, double);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::list<int, bool, float, double>;
+using _B = mpl::remove<_A, 1>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, float);
+ASSERT_SAME(_E, double);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::list<int, bool, float, double>;
+using _B = mpl::remove<_A, 2>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, double);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace C
+
+//-----------------------------------------------------------------------------
+namespace D {
+
+using _A = mpl::list<int, bool, float, double>;
+using _B = mpl::remove<_A, 3>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace D
+} // namespace remove
+
+///////////////////////////////////////////////////////////////////////////////
 namespace index {
 
 //-----------------------------------------------------------------------------
