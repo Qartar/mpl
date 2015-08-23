@@ -119,4 +119,15 @@ static_assert(std::is_same<mpl::nil, _K>::value, "");
 
 } // namespace G
 
+namespace H {
+
+static_assert(std::is_same<G::_E, mpl::index<0, G::_D>>::value, "");
+static_assert(std::is_same<G::_F, mpl::index<1, G::_D>>::value, "");
+static_assert(std::is_same<G::_G, mpl::index<2, G::_D>>::value, "");
+static_assert(std::is_same<G::_H, mpl::index<3, G::_D>>::value, "");
+static_assert(std::is_same<G::_I, mpl::index<4, G::_D>>::value, "");
+static_assert(std::is_same<G::_J, mpl::index<5, G::_D>>::value, "");
+
+} // namespace H
+
 } // anonymous namespace

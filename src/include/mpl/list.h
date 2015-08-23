@@ -48,6 +48,26 @@ struct fn_extend<cons<_Tx, nil>, _Ty> {
     using type = cons<_Tx, _Ty>;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `index` metafunction
+template<int _Tx, typename _Ty> struct fn_index;
+
+template<int _Tx, typename _Ty, typename _Tz>
+struct fn_index<_Tx, cons<_Ty, _Tz>> {
+    using type = typename fn_index < _Tx - 1, _Tz >::type;
+};
+
+template<typename _Tx, typename _Ty>
+struct fn_index<0, cons<_Tx, _Ty>> {
+    using type = _Tx;
+};
+
+template<int _Tx>
+struct fn_index<_Tx, nil> {
+    static_assert(_Tx < 0, "Index out of bounds.");
+    using type = nil;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,6 +87,14 @@ template<typename... _Targs> using list = typename detail::fn_list<_Targs...>::t
  * a single s-expression list metatype.
  */
 template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * index
+ *
+ * Metafunction for retrieving the n-th type from an s-expression list metatype.
+ */
+template<int _Tx, typename _Ty> using index = typename detail::fn_index<_Tx, _Ty>::type;
 
 } // namespace mpl
 
