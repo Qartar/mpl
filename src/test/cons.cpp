@@ -4,6 +4,10 @@
 
 namespace {
 
+///////////////////////////////////////////////////////////////////////////////
+namespace cons {
+
+//-----------------------------------------------------------------------------
 namespace A {
 
 using _A = mpl::cons<int, bool>;
@@ -15,6 +19,7 @@ ASSERT_SAME(_C, bool);
 
 } // namespace A
 
+//-----------------------------------------------------------------------------
 namespace B {
 
 using _A = mpl::cons<int, mpl::cons<bool, float>>;
@@ -28,6 +33,7 @@ ASSERT_SAME(_D, float);
 
 } // namespace B
 
+//-----------------------------------------------------------------------------
 namespace C {
 
 using _A = mpl::cons<mpl::cons<int, bool>, mpl::cons<float, double>>;
@@ -42,5 +48,6 @@ ASSERT_SAME(_D, float);
 ASSERT_SAME(_E, double);
 
 } // namespace C
+} // namespace cons
 
 } // anonymous namespace

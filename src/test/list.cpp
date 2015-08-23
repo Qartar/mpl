@@ -4,6 +4,10 @@
 
 namespace {
 
+///////////////////////////////////////////////////////////////////////////////
+namespace list {
+
+//-----------------------------------------------------------------------------
 namespace A {
 
 using _A = mpl::list<int>;
@@ -15,6 +19,7 @@ ASSERT_SAME(_C, mpl::nil);
 
 } // namespace A
 
+//-----------------------------------------------------------------------------
 namespace B {
 
 using _A = mpl::list<int, bool>;
@@ -28,6 +33,7 @@ ASSERT_SAME(_D, mpl::nil);
 
 } // namespace B
 
+//-----------------------------------------------------------------------------
 namespace C {
 
 using _A = mpl::list<int, bool, float>;
@@ -42,8 +48,13 @@ ASSERT_SAME(_D, float);
 ASSERT_SAME(_E, mpl::nil);
 
 } // namespace C
+} // namespace list
 
-namespace D {
+///////////////////////////////////////////////////////////////////////////////
+namespace extend {
+
+//-----------------------------------------------------------------------------
+namespace A {
 
 using _A = mpl::list<int>;
 using _B = mpl::list<bool>;
@@ -56,9 +67,10 @@ ASSERT_SAME(_D, int);
 ASSERT_SAME(_E, bool);
 ASSERT_SAME(_F, mpl::nil);
 
-} // namespace D
+} // namespace A
 
-namespace E {
+//-----------------------------------------------------------------------------
+namespace B {
 
 using _A = mpl::list<int>;
 using _B = mpl::list<bool>;
@@ -74,9 +86,10 @@ ASSERT_SAME(_F, bool);
 ASSERT_SAME(_G, float);
 ASSERT_SAME(_H, mpl::nil);
 
-} // namespace E
+} // namespace B
 
-namespace F {
+//-----------------------------------------------------------------------------
+namespace C {
 
 using _A = mpl::list<int, bool>;
 using _B = mpl::list<float, double>;
@@ -93,9 +106,10 @@ ASSERT_SAME(_F, float);
 ASSERT_SAME(_G, double);
 ASSERT_SAME(_H, mpl::nil);
 
-} // namespace F
+} // namespace C
 
-namespace G {
+//-----------------------------------------------------------------------------
+namespace D {
 
 using _A = mpl::list<int, bool>;
 using _B = mpl::list<float, double>;
@@ -117,50 +131,62 @@ ASSERT_SAME(_I, wchar_t);
 ASSERT_SAME(_J, unsigned);
 ASSERT_SAME(_K, mpl::nil);
 
-} // namespace G
+} // namespace D
+} // namespace extend
 
-namespace H {
+///////////////////////////////////////////////////////////////////////////////
+namespace append {
 
-using _E = mpl::index<0, G::_D>;
-using _F = mpl::index<1, G::_D>;
-using _G = mpl::index<2, G::_D>;
-using _H = mpl::index<3, G::_D>;
-using _I = mpl::index<4, G::_D>;
-using _J = mpl::index<5, G::_D>;
-
-ASSERT_SAME(_E, G::_E);
-ASSERT_SAME(_F, G::_F);
-ASSERT_SAME(_G, G::_G);
-ASSERT_SAME(_H, G::_H);
-ASSERT_SAME(_I, G::_I);
-ASSERT_SAME(_J, G::_J);
-
-} // namespace H
-
-namespace I {
+//-----------------------------------------------------------------------------
+namespace A {
 
 using _A = mpl::list<int>;
 using _B = mpl::append<_A, bool>;
-using _C = mpl::index<0, _B>;
-using _D = mpl::index<1, _B>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
 
 ASSERT_SAME(_C, int);
 ASSERT_SAME(_D, bool);
 
-} // namespace I
+} // namespace A
 
-namespace J {
+//-----------------------------------------------------------------------------
+namespace B {
 
 using _A = mpl::list<int>;
 using _B = mpl::append<_A, bool, float>;
-using _C = mpl::index<0, _B>;
-using _D = mpl::index<1, _B>;
-using _E = mpl::index<2, _B>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
 
 ASSERT_SAME(_C, int);
 ASSERT_SAME(_D, bool);
 ASSERT_SAME(_E, float);
 
-} // namespace J
+} // namespace B
+} // namespace append
+
+///////////////////////////////////////////////////////////////////////////////
+namespace index {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _E = mpl::index<0, extend::D::_D>;
+using _F = mpl::index<1, extend::D::_D>;
+using _G = mpl::index<2, extend::D::_D>;
+using _H = mpl::index<3, extend::D::_D>;
+using _I = mpl::index<4, extend::D::_D>;
+using _J = mpl::index<5, extend::D::_D>;
+
+ASSERT_SAME(_E, extend::D::_E);
+ASSERT_SAME(_F, extend::D::_F);
+ASSERT_SAME(_G, extend::D::_G);
+ASSERT_SAME(_H, extend::D::_H);
+ASSERT_SAME(_I, extend::D::_I);
+ASSERT_SAME(_J, extend::D::_J);
+
+} // namespace A
+} // namespace index
 
 } // anonymous namespace
