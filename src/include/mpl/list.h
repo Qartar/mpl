@@ -49,6 +49,31 @@ struct fn_extend<cons<_Tx, nil>, _Ty> {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `insert` metafunction
+template<typename _Tx, int _Ty, typename... _Targs> struct fn_insert;
+
+template<typename _Tx, typename _Ty, int _Tz, typename... _Targs>
+struct fn_insert<cons<_Tx, _Ty>, _Tz, _Targs...> {
+    using type = cons < _Tx, typename fn_insert < _Ty, _Tz - 1, _Targs... >::type >;
+};
+
+template<typename _Tx, typename _Ty, typename... _Targs>
+struct fn_insert<cons<_Tx, _Ty>, 0, _Targs...> {
+    using type = typename fn_extend<typename fn_list<_Targs..., _Tx>::type, _Ty>::type;
+};
+
+template<typename... _Targs>
+struct fn_insert<nil, 0, _Targs...> {
+    using type = typename fn_list<_Targs...>::type;
+};
+
+template<int _Tx, typename... _Targs>
+struct fn_insert<nil, _Tx, _Targs...> {
+    static_assert(_Tx < 0, "Index out of bounds.");
+    using type = nil;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `index` metafunction
 template<typename _Tx, int _Ty> struct fn_index;
 
@@ -95,6 +120,14 @@ template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...
  * Metafunction for appending one or more types to an s-expression list metatype.
  */
 template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targs...>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * insert
+ *
+ * Metafunction for inserting one or more types into an s-expression list metatype.
+ */
+template<typename _Tx, int _Ty, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**

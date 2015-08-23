@@ -144,9 +144,11 @@ using _A = mpl::list<int>;
 using _B = mpl::append<_A, bool>;
 using _C = mpl::car<_B>;
 using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::cdr<mpl::cdr<_B>>;
 
 ASSERT_SAME(_C, int);
 ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, mpl::nil);
 
 } // namespace A
 
@@ -158,13 +160,127 @@ using _B = mpl::append<_A, bool, float>;
 using _C = mpl::car<_B>;
 using _D = mpl::car<mpl::cdr<_B>>;
 using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
 
 ASSERT_SAME(_C, int);
 ASSERT_SAME(_D, bool);
 ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, mpl::nil);
 
 } // namespace B
 } // namespace append
+
+///////////////////////////////////////////////////////////////////////////////
+namespace insert {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::list<bool, float>;
+using _B = mpl::insert<_A, 0, int>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::list<int, float>;
+using _B = mpl::insert<_A, 1, bool>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::list<int, bool>;
+using _B = mpl::insert<_A, 2, float>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::cdr<mpl::cdr<mpl::cdr<_B>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, mpl::nil);
+
+} // namespace C
+
+//-----------------------------------------------------------------------------
+namespace D {
+
+using _A = mpl::list<float, double>;
+using _B = mpl::insert<_A, 0, int, bool>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::car<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+using _G = mpl::cdr<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, double);
+ASSERT_SAME(_G, mpl::nil);
+
+} // namespace D
+
+//-----------------------------------------------------------------------------
+namespace E {
+
+using _A = mpl::list<int, double>;
+using _B = mpl::insert<_A, 1, bool, float>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::car<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+using _G = mpl::cdr<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, double);
+ASSERT_SAME(_G, mpl::nil);
+
+} // namespace E
+
+//-----------------------------------------------------------------------------
+namespace F {
+
+using _A = mpl::list<int, bool>;
+using _B = mpl::insert<_A, 2, float, double>;
+using _C = mpl::car<_B>;
+using _D = mpl::car<mpl::cdr<_B>>;
+using _E = mpl::car<mpl::cdr<mpl::cdr<_B>>>;
+using _F = mpl::car<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+using _G = mpl::cdr<mpl::cdr<mpl::cdr<mpl::cdr<_B>>>>;
+
+ASSERT_SAME(_C, int);
+ASSERT_SAME(_D, bool);
+ASSERT_SAME(_E, float);
+ASSERT_SAME(_F, double);
+ASSERT_SAME(_G, mpl::nil);
+
+} // namespace F
+} // namespace insert
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace index {
