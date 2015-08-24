@@ -22,6 +22,25 @@ struct fn_map<_Tfunc, nil> {
     using type = nil;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `filter` metafunction
+template<template<typename> class _Tpred, typename _Tlist, typename = void> struct fn_filter;
+
+template<template<typename> class _Tpred, typename _Tx, typename _Ty>
+struct fn_filter < _Tpred, cons<_Tx, _Ty>, std::enable_if_t < !_Tpred<_Tx>::value >> {
+    using type = typename fn_filter<_Tpred, _Ty>::type;
+};
+
+template<template<typename> class _Tpred, typename _Tx, typename _Ty>
+struct fn_filter<_Tpred, cons<_Tx, _Ty>, std::enable_if_t<_Tpred<_Tx>::value>> {
+    using type = cons<_Tx, typename fn_filter<_Tpred, _Ty>::type>;
+};
+
+template<template<typename> class _Tpred>
+struct fn_filter<_Tpred, nil> {
+    using type = nil;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,6 +50,15 @@ struct fn_map<_Tfunc, nil> {
  * Metafunction for applying a metafunction to each type element in a `list` metatype.
  */
 template<template<typename> class _Tfunc, typename _Tlist> using map = typename detail::fn_map<_Tfunc, _Tlist>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * filter
+ *
+ * Metafunction for filtering out type elements in a `list` metatype which do
+ * not satisfy a given predicate metafunction.
+ */
+template<template<typename> class _Tpred, typename _Tlist> using filter = typename detail::fn_filter<_Tpred, _Tlist>::type;
 
 } // namespace mpl
 
