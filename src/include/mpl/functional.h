@@ -41,6 +41,20 @@ struct fn_filter<_Tpred, nil> {
     using type = nil;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `reduce` metafunction
+template<template<typename, typename> class _Top, typename _Tlist> struct fn_reduce;
+
+template<template<typename, typename> class _Top, typename _Tx, typename _Ty>
+struct fn_reduce<_Top, cons<_Tx, _Ty>> {
+    using type = _Top<_Tx, typename fn_reduce<_Top, _Ty>::type>;
+};
+
+template<template<typename, typename> class _Top, typename _Tx, typename _Ty>
+struct fn_reduce<_Top, cons<_Tx, cons<_Ty, nil>>> {
+    using type = _Top<_Tx, _Ty>;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,6 +73,15 @@ template<template<typename> class _Tfunc, typename _Tlist> using map = typename 
  * not satisfy a given predicate metafunction.
  */
 template<template<typename> class _Tpred, typename _Tlist> using filter = typename detail::fn_filter<_Tpred, _Tlist>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * reduce
+ *
+ * Metafunction for combining all type elements in a `list` metatype by
+ * repeatedly applying an operator metafunction to adjacent type elements.
+ */
+template<template<typename, typename> class _Top, typename _Tlist> using reduce = typename detail::fn_reduce<_Top, _Tlist>::type;
 
 } // namespace mpl
 
