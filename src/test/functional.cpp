@@ -1,6 +1,7 @@
 #include "mpl_test.h"
 
 #include "mpl/functional.h"
+#include "mpl/logical.h"
 
 namespace {
 
@@ -83,40 +84,19 @@ ASSERT_SAME(_A, _B);
 ///////////////////////////////////////////////////////////////////////////////
 namespace reduce {
 
-template<typename _Tx, typename _Ty, typename = void, typename = void> struct fn_and {
-    using type = std::false_type;
-};
-
-template<typename _Tx, typename _Ty>
-struct fn_and<_Tx, _Ty, std::enable_if_t<_Tx::value>, std::enable_if_t<_Ty::value>> {
-    using type = std::true_type;
-};
-
-template<typename _Tx, typename _Ty, typename = void, typename = void> struct fn_or {
-    using type = std::true_type;
-};
-
-template<typename _Tx, typename _Ty>
-struct fn_or < _Tx, _Ty, std::enable_if_t < !_Tx::value >, std::enable_if_t < !_Ty::value >> {
-    using type = std::false_type;
-};
-
-template<typename _Tx, typename _Ty> using and = typename fn_and<_Tx, _Ty>::type;
-template<typename _Tx, typename _Ty> using or = typename fn_or<_Tx, _Ty>::type;
-
 //-----------------------------------------------------------------------------
 namespace A {
 
 using _A = mpl::list<int, bool, float, double>;
-using _B = mpl::reduce<or, mpl::map<std::is_floating_point, _A>>;
-using _C = mpl::reduce<and, mpl::map<std::is_floating_point, _A>>;
-using _D = mpl::reduce<or, mpl::map<std::is_pointer, _A>>;
-using _E = mpl::reduce<and, mpl::map<std::is_fundamental, _A>>;
+using _B = mpl::reduce<mpl::or, mpl::map<std::is_floating_point, _A>>;
+using _C = mpl::reduce<mpl::and, mpl::map<std::is_floating_point, _A>>;
+using _D = mpl::reduce<mpl::or, mpl::map<std::is_pointer, _A>>;
+using _E = mpl::reduce<mpl::and, mpl::map<std::is_fundamental, _A>>;
 
-ASSERT_SAME(_B, std::true_type);
-ASSERT_SAME(_C, std::false_type);
-ASSERT_SAME(_D, std::false_type);
-ASSERT_SAME(_E, std::true_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::false_type);
+ASSERT_SAME(_D, mpl::false_type);
+ASSERT_SAME(_E, mpl::true_type);
 
 } // namespace A
 } // namespace reduce
