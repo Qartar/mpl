@@ -82,6 +82,20 @@ struct fn_or<_Tx, _Ty> {
     using type = typename op_or<_Tx, _Ty>::type;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `not` metafunction
+template<typename _Tx, typename = void> struct fn_not;
+
+template<typename _Tx>
+struct fn_not<_Tx, typename fn_enable_if<_Tx::value>::type> {
+    using type = false_type;
+};
+
+template<typename _Tx>
+struct fn_not < _Tx, typename fn_enable_if < !_Tx::value >::type > {
+    using type = true_type;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,6 +115,12 @@ template<typename _Tx, typename _Ty, typename... _Targs> using and = typename de
  * or
  */
 template<typename _Tx, typename _Ty, typename... _Targs> using or = typename detail::fn_or<_Tx, _Ty, _Targs...>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * not
+ */
+template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
 
 } // namespace mpl
 

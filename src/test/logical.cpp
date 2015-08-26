@@ -2,6 +2,8 @@
 
 #include "mpl/logical.h"
 
+namespace {
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace and {
 
@@ -159,3 +161,20 @@ ASSERT_SAME(_D, mpl::false_type);
 
 } // namespace E
 } // namespace or
+
+///////////////////////////////////////////////////////////////////////////////
+namespace not {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::not<mpl::true_type>;
+using _B = mpl::not<mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::false_type);
+ASSERT_SAME(_B, mpl::true_type);
+
+} // namespace A
+} // namespace not
+
+} // anonymous namespace
