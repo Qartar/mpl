@@ -170,6 +170,63 @@ using _B = mpl::extend<_A>;
 ASSERT_SAME(_B, _A);
 
 } // namespace F
+
+//-----------------------------------------------------------------------------
+namespace G {
+
+using _A = mpl::list<>;
+using _B = mpl::list<int>;
+using _C = mpl::list<bool, float>;
+using _D = mpl::extend<_A, _B, _C>;
+using _E = mpl::car<_D>;
+using _F = mpl::car<mpl::cdr<_D>>;
+using _G = mpl::car<mpl::cdr<mpl::cdr<_D>>>;
+using _H = mpl::cdr<mpl::cdr<mpl::cdr<_D>>>;
+
+ASSERT_SAME(_E, int);
+ASSERT_SAME(_F, bool);
+ASSERT_SAME(_G, float);
+ASSERT_SAME(_H, mpl::nil);
+
+} // namespace G
+
+//-----------------------------------------------------------------------------
+namespace H {
+
+using _A = mpl::list<int, bool>;
+using _B = mpl::list<float>;
+using _C = mpl::list<>;
+using _D = mpl::extend<_A, _B, _C>;
+using _E = mpl::car<_D>;
+using _F = mpl::car<mpl::cdr<_D>>;
+using _G = mpl::car<mpl::cdr<mpl::cdr<_D>>>;
+using _H = mpl::cdr<mpl::cdr<mpl::cdr<_D>>>;
+
+ASSERT_SAME(_E, int);
+ASSERT_SAME(_F, bool);
+ASSERT_SAME(_G, float);
+ASSERT_SAME(_H, mpl::nil);
+
+} // namespace H
+
+//-----------------------------------------------------------------------------
+namespace I {
+
+using _A = mpl::list<int, bool>;
+using _B = mpl::list<>;
+using _C = mpl::list<float>;
+using _D = mpl::extend<_A, _B, _C>;
+using _E = mpl::car<_D>;
+using _F = mpl::car<mpl::cdr<_D>>;
+using _G = mpl::car<mpl::cdr<mpl::cdr<_D>>>;
+using _H = mpl::cdr<mpl::cdr<mpl::cdr<_D>>>;
+
+ASSERT_SAME(_E, int);
+ASSERT_SAME(_F, bool);
+ASSERT_SAME(_G, float);
+ASSERT_SAME(_H, mpl::nil);
+
+} // namespace I
 } // namespace extend
 
 ///////////////////////////////////////////////////////////////////////////////

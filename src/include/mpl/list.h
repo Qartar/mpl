@@ -54,6 +54,11 @@ struct fn_extend<cons<_Tx, nil>, _Ty> {
 };
 
 template<typename _Tx>
+struct fn_extend<nil, _Tx> {
+    using type = _Tx;
+};
+
+template<typename _Tx>
 struct fn_extend<_Tx> {
     using type = _Tx;
 };
