@@ -48,6 +48,25 @@ ASSERT_SAME(_D, float);
 ASSERT_SAME(_E, mpl::nil);
 
 } // namespace C
+
+//-----------------------------------------------------------------------------
+namespace D {
+
+using _A = mpl::list<>;
+
+ASSERT_SAME(_A, mpl::nil);
+
+} // namespace D
+
+//-----------------------------------------------------------------------------
+namespace E {
+
+using _A = mpl::list<mpl::nil>;
+using _B = mpl::index<_A, 0>;
+
+ASSERT_SAME(_B, mpl::nil);
+
+} // namespace E
 } // namespace list
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,6 +151,25 @@ ASSERT_SAME(_J, unsigned);
 ASSERT_SAME(_K, mpl::nil);
 
 } // namespace D
+
+//-----------------------------------------------------------------------------
+namespace E {
+
+using _A = mpl::extend<>;
+
+ASSERT_SAME(_A, mpl::nil);
+
+} // namespace E
+
+//-----------------------------------------------------------------------------
+namespace F {
+
+using _A = mpl::list<int, bool>;
+using _B = mpl::extend<_A>;
+
+ASSERT_SAME(_B, _A);
+
+} // namespace F
 } // namespace extend
 
 ///////////////////////////////////////////////////////////////////////////////

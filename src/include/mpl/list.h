@@ -29,6 +29,11 @@ struct fn_list<_Tx> {
     using type = cons<_Tx, nil>;
 };
 
+template<>
+struct fn_list<> {
+    using type = nil;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `extend` metafunction
 template<typename... _Targs> struct fn_extend;
@@ -46,6 +51,16 @@ struct fn_extend<cons<_Tx, _Ty>, _Tz> {
 template<typename _Tx, typename _Ty>
 struct fn_extend<cons<_Tx, nil>, _Ty> {
     using type = cons<_Tx, _Ty>;
+};
+
+template<typename _Tx>
+struct fn_extend<_Tx> {
+    using type = _Tx;
+};
+
+template<>
+struct fn_extend<> {
+    using type = nil;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,8 +143,8 @@ template<typename... _Targs> using list = typename detail::fn_list<_Targs...>::t
 /**
  * extend
  *
- * Metafunction for concatenating two or more `list` metatypes into a single
- * `list` metatype.
+ * Metafunction for concatenating a variadic list of `list` metatypes into a
+ * single `list` metatype.
  */
 template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...>::type;
 
@@ -139,7 +154,7 @@ template<typename... _Targs> using extend = typename detail::fn_extend<_Targs...
  *
  * Metafunction for appending one or more type elements onto a `list` metatype.
  */
-template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targs...>>;
+template<typename _Tx, typename _Ty, typename... _Targs> using append = extend<_Tx, list<_Ty, _Targs...>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -147,7 +162,7 @@ template<typename _Tx, typename... _Targs> using append = extend<_Tx, list<_Targ
  *
  * Metafunction for inserting one or more type elements into a `list` metatype.
  */
-template<typename _Tx, int _Ty, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Targs...>::type;
+template<typename _Tx, int _Ty, typename _Tz, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Tz, _Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
