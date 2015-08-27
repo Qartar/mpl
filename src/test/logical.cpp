@@ -164,6 +164,19 @@ ASSERT_SAME(_C, mpl::false_type);
 ASSERT_SAME(_D, mpl::false_type);
 
 } // namespace C
+
+//-----------------------------------------------------------------------------
+namespace D {
+
+using _A = mpl::all<>;
+using _B = mpl::all<mpl::true_type>;
+using _C = mpl::all<mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::false_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::false_type);
+
+} // namespace D
 } // namespace all
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,6 +226,19 @@ ASSERT_SAME(_C, mpl::true_type);
 ASSERT_SAME(_D, mpl::false_type);
 
 } // namespace C
+
+//-----------------------------------------------------------------------------
+namespace D {
+
+using _A = mpl::any<>;
+using _B = mpl::any<mpl::true_type>;
+using _C = mpl::any<mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::false_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::false_type);
+
+} // namespace D
 } // namespace any
 
 } // anonymous namespace
