@@ -25,10 +25,10 @@ ASSERT_SAME(_D, mpl::false_type);
 //-----------------------------------------------------------------------------
 namespace B {
 
-using _A = mpl::and<mpl::true_type, mpl::true_type, mpl::true_type>;
-using _B = mpl::and<mpl::true_type, mpl::true_type, mpl::false_type>;
-using _C = mpl::and<mpl::true_type, mpl::false_type, mpl::true_type>;
-using _D = mpl::and<mpl::true_type, mpl::false_type, mpl::false_type>;
+using _A = mpl::and<std::true_type, std::true_type>;
+using _B = mpl::and<std::true_type, std::false_type>;
+using _C = mpl::and<std::false_type, std::true_type>;
+using _D = mpl::and<std::false_type, std::false_type>;
 
 ASSERT_SAME(_A, mpl::true_type);
 ASSERT_SAME(_B, mpl::false_type);
@@ -40,36 +40,6 @@ ASSERT_SAME(_D, mpl::false_type);
 //-----------------------------------------------------------------------------
 namespace C {
 
-using _A = mpl::and<mpl::true_type, mpl::true_type, mpl::true_type, mpl::true_type>;
-using _B = mpl::and<mpl::true_type, mpl::true_type, mpl::true_type, mpl::false_type>;
-using _C = mpl::and<mpl::true_type, mpl::true_type, mpl::false_type, mpl::true_type>;
-using _D = mpl::and<mpl::true_type, mpl::true_type, mpl::false_type, mpl::false_type>;
-
-ASSERT_SAME(_A, mpl::true_type);
-ASSERT_SAME(_B, mpl::false_type);
-ASSERT_SAME(_C, mpl::false_type);
-ASSERT_SAME(_D, mpl::false_type);
-
-} // namespace C
-
-//-----------------------------------------------------------------------------
-namespace D {
-
-using _A = mpl::and<std::true_type, std::true_type>;
-using _B = mpl::and<std::true_type, std::false_type>;
-using _C = mpl::and<std::false_type, std::true_type>;
-using _D = mpl::and<std::false_type, std::false_type>;
-
-ASSERT_SAME(_A, mpl::true_type);
-ASSERT_SAME(_B, mpl::false_type);
-ASSERT_SAME(_C, mpl::false_type);
-ASSERT_SAME(_D, mpl::false_type);
-
-} // namespace D
-
-//-----------------------------------------------------------------------------
-namespace E {
-
 using _A = mpl::and<std::true_type, mpl::true_type>;
 using _B = mpl::and<std::true_type, mpl::false_type>;
 using _C = mpl::and<std::false_type, mpl::true_type>;
@@ -80,7 +50,7 @@ ASSERT_SAME(_B, mpl::false_type);
 ASSERT_SAME(_C, mpl::false_type);
 ASSERT_SAME(_D, mpl::false_type);
 
-} // namespace E
+} // namespace C
 } // namespace and
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,10 +74,10 @@ ASSERT_SAME(_D, mpl::false_type);
 //-----------------------------------------------------------------------------
 namespace B {
 
-using _A = mpl::or<mpl::false_type, mpl::true_type, mpl::true_type>;
-using _B = mpl::or<mpl::false_type, mpl::true_type, mpl::false_type>;
-using _C = mpl::or<mpl::false_type, mpl::false_type, mpl::true_type>;
-using _D = mpl::or<mpl::false_type, mpl::false_type, mpl::false_type>;
+using _A = mpl::or<std::true_type, std::true_type>;
+using _B = mpl::or<std::true_type, std::false_type>;
+using _C = mpl::or<std::false_type, std::true_type>;
+using _D = mpl::or<std::false_type, std::false_type>;
 
 ASSERT_SAME(_A, mpl::true_type);
 ASSERT_SAME(_B, mpl::true_type);
@@ -119,36 +89,6 @@ ASSERT_SAME(_D, mpl::false_type);
 //-----------------------------------------------------------------------------
 namespace C {
 
-using _A = mpl::or<mpl::false_type, mpl::false_type, mpl::true_type, mpl::true_type>;
-using _B = mpl::or<mpl::false_type, mpl::false_type, mpl::true_type, mpl::false_type>;
-using _C = mpl::or<mpl::false_type, mpl::false_type, mpl::false_type, mpl::true_type>;
-using _D = mpl::or<mpl::false_type, mpl::false_type, mpl::false_type, mpl::false_type>;
-
-ASSERT_SAME(_A, mpl::true_type);
-ASSERT_SAME(_B, mpl::true_type);
-ASSERT_SAME(_C, mpl::true_type);
-ASSERT_SAME(_D, mpl::false_type);
-
-} // namespace C
-
-//-----------------------------------------------------------------------------
-namespace D {
-
-using _A = mpl::or<std::true_type, std::true_type>;
-using _B = mpl::or<std::true_type, std::false_type>;
-using _C = mpl::or<std::false_type, std::true_type>;
-using _D = mpl::or<std::false_type, std::false_type>;
-
-ASSERT_SAME(_A, mpl::true_type);
-ASSERT_SAME(_B, mpl::true_type);
-ASSERT_SAME(_C, mpl::true_type);
-ASSERT_SAME(_D, mpl::false_type);
-
-} // namespace D
-
-//-----------------------------------------------------------------------------
-namespace E {
-
 using _A = mpl::or<std::true_type, mpl::true_type>;
 using _B = mpl::or<std::true_type, mpl::false_type>;
 using _C = mpl::or<std::false_type, mpl::true_type>;
@@ -159,7 +99,7 @@ ASSERT_SAME(_B, mpl::true_type);
 ASSERT_SAME(_C, mpl::true_type);
 ASSERT_SAME(_D, mpl::false_type);
 
-} // namespace E
+} // namespace C
 } // namespace or
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,5 +116,103 @@ ASSERT_SAME(_B, mpl::true_type);
 
 } // namespace A
 } // namespace not
+
+///////////////////////////////////////////////////////////////////////////////
+namespace all {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::all<mpl::true_type, mpl::true_type>;
+using _B = mpl::all<mpl::true_type, mpl::false_type>;
+using _C = mpl::all<mpl::false_type, mpl::true_type>;
+using _D = mpl::all<mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::false_type);
+ASSERT_SAME(_C, mpl::false_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::all<mpl::true_type, mpl::true_type, mpl::true_type>;
+using _B = mpl::all<mpl::true_type, mpl::true_type, mpl::false_type>;
+using _C = mpl::all<mpl::true_type, mpl::false_type, mpl::true_type>;
+using _D = mpl::all<mpl::true_type, mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::false_type);
+ASSERT_SAME(_C, mpl::false_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::all<mpl::true_type, mpl::true_type, mpl::true_type, mpl::true_type>;
+using _B = mpl::all<mpl::true_type, mpl::true_type, mpl::true_type, mpl::false_type>;
+using _C = mpl::all<mpl::true_type, mpl::true_type, mpl::false_type, mpl::true_type>;
+using _D = mpl::all<mpl::true_type, mpl::true_type, mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::false_type);
+ASSERT_SAME(_C, mpl::false_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace C
+} // namespace all
+
+///////////////////////////////////////////////////////////////////////////////
+namespace any {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::any<mpl::true_type, mpl::true_type>;
+using _B = mpl::any<mpl::true_type, mpl::false_type>;
+using _C = mpl::any<mpl::false_type, mpl::true_type>;
+using _D = mpl::any<mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::true_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::any<mpl::false_type, mpl::true_type, mpl::true_type>;
+using _B = mpl::any<mpl::false_type, mpl::true_type, mpl::false_type>;
+using _C = mpl::any<mpl::false_type, mpl::false_type, mpl::true_type>;
+using _D = mpl::any<mpl::false_type, mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::true_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::any<mpl::false_type, mpl::false_type, mpl::true_type, mpl::true_type>;
+using _B = mpl::any<mpl::false_type, mpl::false_type, mpl::true_type, mpl::false_type>;
+using _C = mpl::any<mpl::false_type, mpl::false_type, mpl::false_type, mpl::true_type>;
+using _D = mpl::any<mpl::false_type, mpl::false_type, mpl::false_type, mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::true_type);
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::true_type);
+ASSERT_SAME(_D, mpl::false_type);
+
+} // namespace C
+} // namespace any
 
 } // anonymous namespace
