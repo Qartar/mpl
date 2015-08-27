@@ -168,6 +168,30 @@ template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
+ * nand
+ */
+template<typename _Tx, typename _Ty> using nand = not<and<_Tx, _Ty>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * nor
+ */
+template<typename _Tx, typename _Ty> using nor = not<or<_Tx, _Ty>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * xor
+ */
+template<typename _Tx, typename _Ty> using xor = and <or<_Tx, _Ty>, nand<_Tx, _Ty>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * xnor
+ */
+template<typename _Tx, typename _Ty> using xnor = or <nor<_Tx, _Ty>, and<_Tx, _Ty>>;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
  * all
  */
 template<typename... _Targs> using all = typename detail::fn_all<_Targs...>::type;
