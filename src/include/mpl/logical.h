@@ -95,6 +95,11 @@ struct fn_all<_Tx, _Targs...> {
     using type = typename fn_all<_Tx, typename fn_all<_Targs...>::type>::type;
 };
 
+template<typename... _Targs>
+struct fn_all<false_type, _Targs...> {
+    using type = false_type;
+};
+
 template<typename _Tx, typename _Ty>
 struct fn_all<_Tx, _Ty> {
     using type = typename fn_and<_Tx, _Ty>::type;
@@ -117,6 +122,11 @@ template<typename... _Targs> struct fn_any;
 template<typename _Tx, typename... _Targs>
 struct fn_any<_Tx, _Targs...> {
     using type = typename fn_any<_Tx, typename fn_any<_Targs...>::type>::type;
+};
+
+template<typename... _Targs>
+struct fn_any<true_type, _Targs...> {
+    using type = true_type;
 };
 
 template<typename _Tx, typename _Ty>
