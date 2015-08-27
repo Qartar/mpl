@@ -139,66 +139,116 @@ struct fn_any<> {
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * enable_if
+ *
+ * Helper function for SFINAE resolution. Evaluates to void if the boolean
+ * expression is true, otherwise does not evaluate, preventing substitution by
+ * a template specialization.
  */
 template<bool _Tbool, typename _Ty = void> using enable_if = typename detail::fn_enable_if<_Tbool, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * truth_type
+ *
+ * Helper function for evaluating the truth type of a metatype. Evaluates to
+ * true_type if _Tx::value is true, evaluates to false_type if _Tx::value is
+ * false.
  */
 template<typename _Tx> using truth_type = typename detail::fn_truth_type<_Tx>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
+ * not
+ *
+ * Evaluates to the opposite truth type of _Tx.
+ */
+template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
  * and
+ *
+ *  * | 0 1  Evaluates to true_type if both _Tx and _Ty evaluate to true_type.
+ *  --+----
+ *  0 | 0 0  Both arguments must evaluate to either true_type or false_type.
+ *  1 | 0 1
  */
 template<typename _Tx, typename _Ty> using and = typename detail::fn_and<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * or
+ *
+ *  * | 0 1  Evaluates to true_type if either _Tx or _Ty evaluate to true_type.
+ *  --+----
+ *  0 | 0 1  Both arguments must evaluate to either true_type or false_type.
+ *  1 | 1 1
  */
 template<typename _Tx, typename _Ty> using or = typename detail::fn_or<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * not
- */
-template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
-
-///////////////////////////////////////////////////////////////////////////////
-/**
  * nand
+ *
+ *  * | 0 1  Evaluates to true_type if either _Tx or _Ty evaluate to false_type.
+ *  --+----
+ *  0 | 1 1  Both arguments must evaluate to either true_type or false_type.
+ *  1 | 1 0
  */
 template<typename _Tx, typename _Ty> using nand = not<and<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * nor
+ *
+ *  * | 0 1  Evaluates to false_type if both _Tx or _Ty evaluate to false_type.
+ *  --+----
+ *  0 | 1 0  Both arguments must evaluate to either true_type or false_type.
+ *  1 | 0 0
  */
 template<typename _Tx, typename _Ty> using nor = not<or<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * xor
+ *
+ *  * | 0 1  Evaluates to true_type if either but not both _Tx or _Ty evaluate
+ *  --+----  to true_type.
+ *  0 | 0 1
+ *  1 | 1 0  Both arguments must evaluate to either true_type or false_type.
  */
 template<typename _Tx, typename _Ty> using xor = and <or<_Tx, _Ty>, nand<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * xnor
+ *
+ *  * | 0 1  Evaluates to true_type if _Tx and _Ty both evaluate to either
+ *  --+----  true_type or false_type.
+ *  0 | 1 0
+ *  1 | 0 1  Both arguments must evaluate to either true_type or false_type.
  */
 template<typename _Tx, typename _Ty> using xnor = or <nor<_Tx, _Ty>, and<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * all
+ *
+ * Evaluates to true_type if all type arguments evaluate to true_type. An empty
+ * argument list evaluates to false_type.
+ *
+ * All arguments must evaluate to either true_type or false_type.
  */
 template<typename... _Targs> using all = typename detail::fn_all<_Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * any
+ *
+ * Evaluates to true_type if any type arguments evaluate to true_type. An empty
+ * argument list evaluates to false_type.
+ *
+ * All arguments must evaluate to either true_type or false_type.
  */
 template<typename... _Targs> using any = typename detail::fn_any<_Targs...>::type;
 

@@ -5,6 +5,21 @@
 namespace {
 
 ///////////////////////////////////////////////////////////////////////////////
+namespace not {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::not<mpl::true_type>;
+using _B = mpl::not<mpl::false_type>;
+
+ASSERT_SAME(_A, mpl::false_type);
+ASSERT_SAME(_B, mpl::true_type);
+
+} // namespace A
+} // namespace not
+
+///////////////////////////////////////////////////////////////////////////////
 namespace and {
 
 //-----------------------------------------------------------------------------
@@ -101,21 +116,6 @@ ASSERT_SAME(_D, mpl::false_type);
 
 } // namespace C
 } // namespace or
-
-///////////////////////////////////////////////////////////////////////////////
-namespace not {
-
-//-----------------------------------------------------------------------------
-namespace A {
-
-using _A = mpl::not<mpl::true_type>;
-using _B = mpl::not<mpl::false_type>;
-
-ASSERT_SAME(_A, mpl::false_type);
-ASSERT_SAME(_B, mpl::true_type);
-
-} // namespace A
-} // namespace not
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace nand {
