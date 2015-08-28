@@ -7,12 +7,14 @@ add_library(mpl STATIC
     src/include/mpl/functional.h
     src/include/mpl/list.h
     src/include/mpl/logical.h
+    src/include/mpl/set.h
 
     src/test/mpl_test.h
     src/test/cons.cpp
     src/test/functional.cpp
     src/test/list.cpp
     src/test/logical.cpp
+    src/test/set.cpp
 )
 
 target_include_directories(mpl
