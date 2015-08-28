@@ -70,11 +70,11 @@ struct fn_extend<> {
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `insert` metafunction
-template<typename _Tx, int _Ty, typename... _Targs> struct fn_insert;
+template<typename _Tx, int _Ny, typename... _Targs> struct fn_insert;
 
-template<typename _Tx, typename _Ty, int _Tz, typename... _Targs>
-struct fn_insert<cons<_Tx, _Ty>, _Tz, _Targs...> {
-    using type = cons < _Tx, typename fn_insert < _Ty, _Tz - 1, _Targs... >::type >;
+template<typename _Tx, typename _Ty, int _Nz, typename... _Targs>
+struct fn_insert<cons<_Tx, _Ty>, _Nz, _Targs...> {
+    using type = cons < _Tx, typename fn_insert < _Ty, _Nz - 1, _Targs... >::type >;
 };
 
 template<typename _Tx, typename _Ty, typename... _Targs>
@@ -87,19 +87,19 @@ struct fn_insert<nil, 0, _Targs...> {
     using type = typename fn_list<_Targs...>::type;
 };
 
-template<int _Tx, typename... _Targs>
-struct fn_insert<nil, _Tx, _Targs...> {
-    static_assert(_Tx < 0, "Index out of bounds.");
+template<int _Nx, typename... _Targs>
+struct fn_insert<nil, _Nx, _Targs...> {
+    static_assert(_Nx < 0, "Index out of bounds.");
     using type = nil;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `remove` metafunction
-template<typename _Tx, int _Ty> struct fn_remove;
+template<typename _Tx, int _Ny> struct fn_remove;
 
-template<typename _Tx, typename _Ty, int _Tz>
-struct fn_remove<cons<_Tx, _Ty>, _Tz> {
-    using type = cons < _Tx, typename fn_remove < _Ty, _Tz - 1 >::type >;
+template<typename _Tx, typename _Ty, int _Nz>
+struct fn_remove<cons<_Tx, _Ty>, _Nz> {
+    using type = cons < _Tx, typename fn_remove < _Ty, _Nz - 1 >::type >;
 };
 
 template<typename _Tx, typename _Ty>
@@ -107,19 +107,19 @@ struct fn_remove<cons<_Tx, _Ty>, 0> {
     using type = _Ty;
 };
 
-template<int _Tx>
-struct fn_remove<nil, _Tx> {
-    static_assert(_Tx < 0, "Index out of bounds.");
+template<int _Nx>
+struct fn_remove<nil, _Nx> {
+    static_assert(_Nx < 0, "Index out of bounds.");
     using type = nil;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `index` metafunction
-template<typename _Tx, int _Ty> struct fn_index;
+template<typename _Tx, int _Ny> struct fn_index;
 
-template<typename _Tx, typename _Ty, int _Tz>
-struct fn_index<cons<_Tx, _Ty>, _Tz> {
-    using type = typename fn_index < _Ty, _Tz - 1 >::type;
+template<typename _Tx, typename _Ty, int _Nz>
+struct fn_index<cons<_Tx, _Ty>, _Nz> {
+    using type = typename fn_index < _Ty, _Nz - 1 >::type;
 };
 
 template<typename _Tx, typename _Ty>
@@ -127,9 +127,9 @@ struct fn_index<cons<_Tx, _Ty>, 0> {
     using type = _Tx;
 };
 
-template<int _Tx>
-struct fn_index<nil, _Tx> {
-    static_assert(_Tx < 0, "Index out of bounds.");
+template<int _Nx>
+struct fn_index<nil, _Nx> {
+    static_assert(_Nx < 0, "Index out of bounds.");
     using type = nil;
 };
 
@@ -167,7 +167,7 @@ template<typename _Tx, typename _Ty, typename... _Targs> using append = extend<_
  *
  * Metafunction for inserting one or more type elements into a `list` metatype.
  */
-template<typename _Tx, int _Ty, typename _Tz, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ty, _Tz, _Targs...>::type;
+template<typename _Tx, int _Ny, typename _Tz, typename... _Targs> using insert = typename detail::fn_insert<_Tx, _Ny, _Tz, _Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -175,7 +175,7 @@ template<typename _Tx, int _Ty, typename _Tz, typename... _Targs> using insert =
  *
  * Metafunction for removing a type element by index from a `list` metatype.
  */
-template<typename _Tx, int _Ty> using remove = typename detail::fn_remove<_Tx, _Ty>::type;
+template<typename _Tx, int _Ny> using remove = typename detail::fn_remove<_Tx, _Ny>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -183,7 +183,7 @@ template<typename _Tx, int _Ty> using remove = typename detail::fn_remove<_Tx, _
  *
  * Metafunction for retrieving the n-th type element from a `list` metatype.
  */
-template<typename _Tx, int _Ty> using index = typename detail::fn_index<_Tx, _Ty>::type;
+template<typename _Tx, int _Ny> using index = typename detail::fn_index<_Tx, _Ny>::type;
 
 } // namespace mpl
 

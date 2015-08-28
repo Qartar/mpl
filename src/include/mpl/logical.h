@@ -23,7 +23,7 @@ namespace detail {
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `enable_if` metafunction
-template<bool _Tbool, typename _Ty = void> struct fn_enable_if;
+template<bool _Bx, typename _Ty = void> struct fn_enable_if;
 
 template<typename _Ty>
 struct fn_enable_if<true, _Ty> {
@@ -154,7 +154,7 @@ struct fn_any<> {
  * the boolean expression is true, otherwise does not evaluate, causing a
  * substitution failure which prevents use of the template specialization.
  */
-template<bool _Tbool, typename _Ty = void> using enable_if = typename detail::fn_enable_if<_Tbool, _Ty>::type;
+template<bool _Bx, typename _Ty = void> using enable_if = typename detail::fn_enable_if<_Bx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
