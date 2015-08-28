@@ -39,6 +39,32 @@ struct fn_contains<nil, _Tx, _Tcmp, void> {
     using type = false_type;
 };
 
+template<typename _Tx, typename _Ty, template<typename, typename> class _Tcmp = is_same>
+using fn_contains_t = typename fn_contains<_Tx, _Ty, _Tcmp>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `set` metafunction
+template<template<typename, typename> class _Tcmp, typename _Tx, typename _Ty = nil, typename = void> struct fn_set_iter;
+
+template<template<typename, typename> class _Tcmp, typename _Tx, typename _Ty>
+struct fn_set_iter<_Tcmp, _Tx, _Ty, enable_if<fn_contains_t<_Ty, car<_Tx>, _Tcmp>::value>> {
+    using type = typename fn_set_iter<_Tcmp, cdr<_Tx>, _Ty>::type; 
+};
+
+template<template<typename, typename> class _Tcmp, typename _Tx, typename _Ty>
+struct fn_set_iter<_Tcmp, _Tx, _Ty, enable_if<!fn_contains_t<_Ty, car<_Tx>, _Tcmp>::value>> {
+    using type = typename fn_set_iter<_Tcmp, cdr<_Tx>, append<_Ty, car<_Tx>>>::type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Tx>
+struct fn_set_iter<_Tcmp, nil, _Tx, void> {
+    using type = _Tx;
+};
+
+template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn_set {
+    using type = typename fn_set_iter<_Tcmp, list<_Targs...>>::type;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,6 +79,12 @@ template<typename _Tx, typename _Ty> using is_same = typename detail::fn_is_same
  */
 template<typename _Tx, typename _Ty, template<typename, typename> class _Tcmp = is_same>
 using contains = typename detail::fn_contains<_Tx, _Ty, _Tcmp>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * set
+ */
+template<typename... _Targs> using set = typename detail::fn_set<is_same, _Targs...>::type;
 
 } // namespace mpl
 

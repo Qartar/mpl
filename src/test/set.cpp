@@ -61,4 +61,47 @@ ASSERT_SAME(_E, mpl::false_type);
 } // namespace C
 } // namespace contains
 
+///////////////////////////////////////////////////////////////////////////////
+namespace set {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::set<>;
+using _B = mpl::contains<_A, int>;
+
+ASSERT_SAME(_A, mpl::nil);
+ASSERT_SAME(_B, mpl::false_type);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::set<int, bool, float>;
+using _B = mpl::contains<_A, int>;
+using _C = mpl::contains<_A, bool>;
+using _D = mpl::contains<_A, float>;
+using _E = mpl::contains<_A, double>;
+
+ASSERT_SAME(_B, mpl::true_type);
+ASSERT_SAME(_C, mpl::true_type);
+ASSERT_SAME(_D, mpl::true_type);
+ASSERT_SAME(_E, mpl::false_type);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::set<int, int, bool, bool>;
+using _B = mpl::index<_A, 0>;
+using _C = mpl::index<_A, 1>;
+
+ASSERT_SAME(_B, int);
+ASSERT_SAME(_C, bool);
+
+} // namespace C
+} // namespace set
+
 } // anonymous namespace
