@@ -65,6 +65,12 @@ template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn
     using type = typename fn_set_iter<_Tcmp, list<_Targs...>>::type;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `join` metafunction
+template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn_join {
+    using type = typename fn_set_iter<_Tcmp, extend<_Targs...>>::type;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,6 +91,12 @@ using contains = typename detail::fn_contains<_Tx, _Ty, _Tcmp>::type;
  * set
  */
 template<typename... _Targs> using set = typename detail::fn_set<is_same, _Targs...>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * join
+ */
+template<typename... _Targs> using join = typename detail::fn_join<is_same, _Targs...>::type;
 
 } // namespace mpl
 
