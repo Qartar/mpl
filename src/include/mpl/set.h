@@ -71,6 +71,45 @@ template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn
     using type = typename fn_set_iter<_Tcmp, extend<_Targs...>>::type;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//! Implementation of `meet` metafunction
+template<template<typename, typename> class _Tcmp, typename _Tsets, typename _Ty, typename = void> struct fn_all_contains {
+    using type = false_type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Tsets, typename _Ty>
+struct fn_all_contains<_Tcmp, _Tsets, _Ty, enable_if<fn_contains_t<car<_Tsets>, _Ty, _Tcmp>::value>> {
+    using type = typename fn_all_contains<_Tcmp, cdr<_Tsets>, _Ty>::type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Ty>
+struct fn_all_contains<_Tcmp, nil, _Ty, void> {
+    using type = true_type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Tsets, typename _Ty>
+using fn_all_contains_t = typename fn_all_contains<_Tcmp, _Tsets, _Ty>::type;
+
+template<template<typename, typename> class _Tcmp, typename _Telems, typename _Tsets, typename _Tout = nil, typename = void> struct fn_meet_iter {
+    using type = typename fn_meet_iter<_Tcmp, cdr<_Telems>, _Tsets, _Tout>::type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Telems, typename _Tsets, typename _Tout>
+struct fn_meet_iter<_Tcmp, _Telems, _Tsets, _Tout, enable_if<fn_all_contains_t<_Tcmp, _Tsets, car<_Telems>>::value>> {
+    using type = typename fn_meet_iter<_Tcmp, cdr<_Telems>, _Tsets, append<_Tout, car<_Telems>>>::type;
+};
+
+template<template<typename, typename> class _Tcmp, typename _Tsets, typename _Tout>
+struct fn_meet_iter<_Tcmp, nil, _Tsets, _Tout, void> {
+    using type = _Tout;
+};
+
+template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn_meet {
+    using type = typename fn_meet_iter<_Tcmp,
+                                       typename fn_join<_Tcmp, _Targs...>::type,
+                                       typename fn_list<_Targs...>::type>::type;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,6 +136,12 @@ template<typename... _Targs> using set = typename detail::fn_set<is_same, _Targs
  * join
  */
 template<typename... _Targs> using join = typename detail::fn_join<is_same, _Targs...>::type;
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * meet
+ */
+template<typename... _Targs> using meet = typename detail::fn_meet<is_same, _Targs...>::type;
 
 } // namespace mpl
 

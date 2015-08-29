@@ -170,4 +170,62 @@ ASSERT_SAME(_J, mpl::true_type);
 } // namespace D
 } // namespace join
 
+///////////////////////////////////////////////////////////////////////////////
+namespace meet {
+
+//-----------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::meet<>;
+using _B = mpl::meet<mpl::nil>;
+using _C = mpl::meet<mpl::nil, mpl::nil>;
+
+ASSERT_SAME(_A, mpl::nil);
+ASSERT_SAME(_B, mpl::nil);
+ASSERT_SAME(_C, mpl::nil);
+
+} // namespace A
+
+//-----------------------------------------------------------------------------
+namespace B {
+
+using _A = mpl::set<int, bool, float>;
+using _B = mpl::set<bool, float, double>;
+using _C = mpl::meet<_A, _B>;
+
+using _D = mpl::contains<_C, int>;
+using _E = mpl::contains<_C, bool>;
+using _F = mpl::contains<_C, float>;
+using _G = mpl::contains<_C, double>;
+
+ASSERT_SAME(_D, mpl::false_type);
+ASSERT_SAME(_E, mpl::true_type);
+ASSERT_SAME(_F, mpl::true_type);
+ASSERT_SAME(_G, mpl::false_type);
+
+} // namespace B
+
+//-----------------------------------------------------------------------------
+namespace C {
+
+using _A = mpl::set<int, bool, float>;
+using _B = mpl::set<bool, float, double>;
+using _C = mpl::set<float, double, wchar_t>;
+using _D = mpl::meet<_A, _B, _C>;
+
+using _E = mpl::contains<_D, int>;
+using _F = mpl::contains<_D, bool>;
+using _G = mpl::contains<_D, float>;
+using _H = mpl::contains<_D, double>;
+using _I = mpl::contains<_D, wchar_t>;
+
+ASSERT_SAME(_E, mpl::false_type);
+ASSERT_SAME(_F, mpl::false_type);
+ASSERT_SAME(_G, mpl::true_type);
+ASSERT_SAME(_H, mpl::false_type);
+ASSERT_SAME(_I, mpl::false_type);
+
+} // namespace C
+} // namespace meet
+
 } // anonymous namespace
