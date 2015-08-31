@@ -115,12 +115,20 @@ template<template<typename, typename> class _Tcmp, typename... _Targs> struct fn
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * is_same
+ *
+ * Metafunction for determining whether two types are the same. Evaluates to
+ * `true_type` if _Tx and _Ty are the same type, otherwise evaluates to
+ * `false_type`.
  */
 template<typename _Tx, typename _Ty> using is_same = typename detail::fn_is_same<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * contains
+ *
+ * Metafunction for determining if an iterable container metatype contains
+ * another type. Evaluates to `true_type` if container _Tx contains the type
+ * _Ty as determined by the _Tcmp operator. (default: `is_same`)
  */
 template<typename _Tx, typename _Ty, template<typename, typename> class _Tcmp = is_same>
 using contains = typename detail::fn_contains<_Tx, _Ty, _Tcmp>::type;
@@ -128,18 +136,27 @@ using contains = typename detail::fn_contains<_Tx, _Ty, _Tcmp>::type;
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * set
+ *
+ * Metafunction for constructing an s-expression set metatype from a variadic
+ * list of type arguments. The `is_same` metafunction is used to determine type
+ * equivalence.
  */
 template<typename... _Targs> using set = typename detail::fn_set<is_same, _Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * join
+ *
+ * Metafunction for determining the union of a variadic list of `set` metatypes.
  */
 template<typename... _Targs> using join = typename detail::fn_join<is_same, _Targs...>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * meet
+ *
+ * Metafunction for determining the intersection of a variadic list of `set`
+ * metatypes.
  */
 template<typename... _Targs> using meet = typename detail::fn_meet<is_same, _Targs...>::type;
 
