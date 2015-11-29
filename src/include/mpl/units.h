@@ -54,6 +54,34 @@ struct fn_is_same_base<unitbase<_Tbase, _Nx>, unitbase<_Tbase, _Ny>> {
 template<typename _Tx, typename _Ty> using is_same_base = typename fn_is_same_base<_Tx, _Ty>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `is_same` metafunction
+template<typename _Tx, typename _Ty, typename = void> struct fn_is_same_iter;
+
+template<typename _Tx, typename _Ty>
+struct fn_is_same_iter<_Tx, _Ty, enable_if<contains<_Tx, car<_Ty>>::value>> {
+    using type = typename fn_is_same_iter<_Tx, cdr<_Ty>>::type;
+};
+
+template<typename _Tx>
+struct fn_is_same_iter<_Tx, nil> {
+    using type = true_type;
+};
+
+template<typename _Tx, typename _Ty>
+using fn_is_same_iter_t = typename fn_is_same_iter<_Tx, _Ty>::type;
+
+template<typename _Tx, typename _Ty, typename = void, typename = void> struct fn_is_same {
+    using type = false_type;
+};
+
+template<typename _Tx, typename _Ty>
+struct fn_is_same<_Tx, _Ty,
+        enable_if<fn_is_same_iter_t<_Tx, _Ty>::value>,
+        enable_if<fn_is_same_iter_t<_Ty, _Tx>::value>> {
+    using type = true_type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `is_unit` metafunction
 template<typename _Tx> struct fn_is_unit {
     using type = false_type;
@@ -211,6 +239,15 @@ template<typename _Tx> using reciprocal = typename detail::fn_power < _Tx, -1 >:
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
+ * is_same
+ *
+ * Metafunction for determining whether two unit types are the same. Evaluates
+ * to `true_type` if _Tx and _Ty represent the same dimensional units, otherwise
+ * evaluates to `false_type`.
+ */
+template<typename _Tx, typename _Ty> using is_same = typename detail::fn_is_same<_Tx, _Ty>::type;
+
+////////////////////////////////////////////////////////////////////////////////
 /**
  * is_unit
  *

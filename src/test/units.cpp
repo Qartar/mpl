@@ -6,6 +6,23 @@
 namespace {
 
 ////////////////////////////////////////////////////////////////////////////////
+namespace is_same {
+
+//------------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::units::is_same<mpl::units::si::meters, mpl::units::si::meters>;
+using _B = mpl::units::is_same<mpl::units::si::meters, mpl::units::si::seconds>;
+using _C = mpl::units::is_same<mpl::units::si::meters, mpl::units::si::newtons>;
+
+ASSERT_SAME(mpl::true_type, _A);
+ASSERT_SAME(mpl::false_type, _B);
+ASSERT_SAME(mpl::false_type, _C);
+
+} // namespace A
+} // namespace is_same
+
+////////////////////////////////////////////////////////////////////////////////
 namespace is_unit {
 
 //------------------------------------------------------------------------------
