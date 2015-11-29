@@ -54,6 +54,22 @@ struct fn_is_same_base<unitbase<_Tbase, _Nx>, unitbase<_Tbase, _Ny>> {
 template<typename _Tx, typename _Ty> using is_same_base = typename fn_is_same_base<_Tx, _Ty>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `is_unit` metafunction
+template<typename _Tx> struct fn_is_unit {
+    using type = false_type;
+};
+
+template<typename _Tx, int _Nx, typename _Ty>
+struct fn_is_unit<cons<unitbase<_Tx, _Nx>, _Ty>> {
+    using type = typename fn_is_unit<_Ty>::type;
+};
+
+template<>
+struct fn_is_unit<nil> {
+    using type = true_type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 //! Append a unitbase type onto a unit type and combine appropriately.
 template<typename _Tx, typename _Ty, typename = void> struct fn_append;
 
@@ -192,6 +208,15 @@ template<typename _Tx, int _Ny> using power = typename detail::fn_power<_Tx, _Ny
  * Metafunction which evaluates to the reciprocal of the given unit metatype.
  */
 template<typename _Tx> using reciprocal = typename detail::fn_power < _Tx, -1 >::type;
+
+////////////////////////////////////////////////////////////////////////////////
+/**
+/**
+ * is_unit
+ *
+ * Metafunction for determining whether a type is a unit type.
+ */
+template<typename _Tx> using is_unit = typename detail::fn_is_unit<_Tx>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**

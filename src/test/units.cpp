@@ -6,6 +6,24 @@
 namespace {
 
 ////////////////////////////////////////////////////////////////////////////////
+namespace is_unit {
+
+//------------------------------------------------------------------------------
+namespace A {
+
+template<typename T>
+using is_unit = mpl::units::is_unit<T>;
+
+ASSERT_SAME(mpl::false_type, is_unit<void>);
+ASSERT_SAME(mpl::false_type, is_unit<mpl::units::dimension>);
+ASSERT_SAME(mpl::true_type, is_unit<mpl::units::unit<void>>);
+ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::meters>);
+ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::newtons>);
+
+} // namespace A
+} // namespace is_unit
+
+////////////////////////////////////////////////////////////////////////////////
 namespace value {
 
 //------------------------------------------------------------------------------
