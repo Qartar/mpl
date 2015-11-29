@@ -8,6 +8,7 @@ add_library(mpl STATIC
     src/include/mpl/list.h
     src/include/mpl/logical.h
     src/include/mpl/set.h
+    src/include/mpl/units.h
 
     src/test/mpl_test.h
     src/test/cons.cpp
@@ -15,6 +16,7 @@ add_library(mpl STATIC
     src/test/list.cpp
     src/test/logical.cpp
     src/test/set.cpp
+    src/test/units.cpp
 )
 
 target_include_directories(mpl
