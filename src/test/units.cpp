@@ -1,6 +1,7 @@
 #include "mpl_test.h"
 
 #include "mpl/units.h"
+#include "mpl/list.h"
 
 namespace {
 
@@ -10,7 +11,7 @@ namespace value {
 //------------------------------------------------------------------------------
 namespace A {
 
-using _A = mpl::units::value<int, void>;
+using _A = mpl::units::value<int, mpl::nil>;
 
 void _fA(_A x, _A y) {
     _A _a = x + y;
