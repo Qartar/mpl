@@ -32,12 +32,14 @@ template<typename _Tbase, int _Npower = 1> struct unitbase {
 };
 
 template<int _Nx> struct fn_raise {
-    template<typename _Ty> struct func;
+    template<typename _Ty> struct _func;
 
     template<typename _Tbase, int _Npower>
-    struct func<unitbase<_Tbase, _Npower>> {
+    struct _func<unitbase<_Tbase, _Npower>> {
         using type = unitbase<_Tbase, _Npower* _Nx>;
     };
+
+    template<typename _Ty> using func = typename _func<_Ty>::type;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +57,9 @@ template<typename _Tx, typename _Ty> using is_same_base = typename fn_is_same_ba
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `is_same` metafunction
-template<typename _Tx, typename _Ty, typename = void> struct fn_is_same_iter;
+template<typename _Tx, typename _Ty, typename = void> struct fn_is_same_iter {
+    using type = false_type;
+};
 
 template<typename _Tx, typename _Ty>
 struct fn_is_same_iter<_Tx, _Ty, enable_if<contains<_Tx, car<_Ty>>::value>> {
@@ -99,65 +103,18 @@ struct fn_is_unit<nil> {
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Append a unitbase type onto a unit type and combine appropriately.
-template<typename _Tx, typename _Ty, typename = void> struct fn_append;
+template<typename _Tx, typename _Ty, typename = void> struct fn_append {
+    using type = cons<car<_Tx>, typename fn_append<cdr<_Tx>, _Ty>::type>;
+};
 
 template<typename _Tx, typename _Ty>
 struct fn_append < _Tx, _Ty, enable_if < !contains<_Tx, _Ty, is_same_base>::value >> {
     using type = typename append<_Tx, _Ty>;
 };
 
-template<typename _Tx, typename _Ty>
-struct fn_append<_Tx, _Ty, enable_if<contains<_Tx, _Ty, is_same_base>::value>> {
-    using type = cons<car<_Tx>, typename fn_append<cdr<_Tx>, _Ty>::type>;
-};
-
 template<typename _Tbase, typename _Tlist, int _Nx, int _Ny>
 struct fn_append<cons<unitbase<_Tbase, _Nx>, _Tlist>, unitbase<_Tbase, _Ny>> {
     using type = cons < unitbase < _Tbase, _Nx + _Ny >, _Tlist >;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-//! Extend a list of unit and unitbase types into a list of only unitbase types.
-template<typename... _Targs> struct fn_extend_iter;
-
-//!
-template<typename _Tx, typename _Ty, typename _Tz>
-struct fn_extend_iter<cons<_Tx, _Ty>, _Tz> {
-    using type = typename fn_extend_iter<_Tx, _Ty, _Tz>::type;
-};
-
-//!
-template<typename _Tz>
-struct fn_extend_iter<nil, _Tz> {
-    using type = _Tz;
-};
-
-//! Extend a unit type
-template<typename _Tx, typename _Tlist, typename _Ty, typename _Tz>
-struct fn_extend_iter<cons<cons<_Tx, _Tlist>, _Ty>, _Tz> {
-    using type = typename fn_extend_iter<_Tx, extend<_Tlist, _Ty>, _Tz>::type;
-};
-
-//! Extend a unitbase type
-template<typename _Tx, int _Nx, typename _Ty, typename _Tz>
-struct fn_extend_iter<unitbase<_Tx, _Nx>, _Ty, _Tz> {
-    using unit = unitbase<_Tx, _Nx>;
-    using type = typename fn_extend_iter<_Ty, append<_Tz, unit>>::type;
-};
-
-//! Extend a fundamental unit type
-template<typename _Tx, typename _Ty, typename _Tz>
-struct fn_extend_iter<_Tx, _Ty, _Tz> {
-    using unit = unitbase<_Tx>;
-    using type = typename fn_extend_iter<_Ty, append<_Tz, unit>>::type;
-};
-
-template<typename _Tx> struct fn_extend {
-    using type = typename fn_extend_iter<car<_Tx>, cdr<_Tx>, nil>::type;
-};
-
-template<> struct fn_extend<nil> {
-    using type = nil;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -186,14 +143,14 @@ struct fn_combine<nil> {
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `unit` metaconstructor
-template<typename... _Tunits> struct fn_unit {
-    using type = typename fn_combine<typename fn_extend<list<_Tunits...>>::type>::type;
+template<typename _Tunit> struct fn_unit {
+    using type = list<unitbase<_Tunit, 1>>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `product` metafunction
 template<typename _Tx, typename _Ty> struct fn_product {
-    using type = typename fn_combine<list<_Tx, _Ty>>::type;
+    using type = typename fn_combine<extend<_Tx, _Ty>>::type;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +218,7 @@ template<typename _Tx> using is_unit = typename detail::fn_is_unit<_Tx>::type;
  *
  * Metatype for tracking dimensional units.
  */
-template<typename... _Tunits> using unit = typename detail::fn_unit<_Tunits...>::type;
+template<typename _Tunit> using unit = typename detail::fn_unit<_Tunit>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
@@ -368,18 +325,18 @@ namespace mks {
 using meters = unit<dimension::length>;
 using kilograms = unit<dimension::mass>;
 
-using newtons = unit<quotient<product<kilograms, meters>, power<seconds, 2>>>;
-using pascals = unit<quotient<newtons, power<meters, 2>>>;
-using joules = unit<newtons, meters>;
-using watts = unit<quotient<joules, seconds>>;
-using coulombs = unit<seconds, amperes>;
-using volts = unit<quotient<watts, amperes>>;
-using farads = unit<quotient<coulombs, volts>>;
-using ohms = unit<quotient<volts, amperes>>;
-using siemens = unit<reciprocal<ohms>>;
-using webers = unit<quotient<joules, amperes>>;
-using teslas = unit<quotient<product<volts, seconds>, power<meters, 2>>>;
-using henries = unit<quotient<product<volts, seconds>, amperes>>;
+using newtons = quotient<product<kilograms, meters>, power<seconds, 2>>;
+using pascals = quotient<newtons, power<meters, 2>>;
+using joules = product<newtons, meters>;
+using watts = quotient<joules, seconds>;
+using coulombs = product<seconds, amperes>;
+using volts = quotient<watts, amperes>;
+using farads = quotient<coulombs, volts>;
+using ohms = quotient<volts, amperes>;
+using siemens = reciprocal<ohms>;
+using webers = quotient<joules, amperes>;
+using teslas = quotient<product<volts, seconds>, power<meters, 2>>;
+using henries = quotient<product<volts, seconds>, amperes>;
 
 } // namespace mks
 
