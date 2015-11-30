@@ -324,17 +324,16 @@ class value {
 
 namespace si {
 
+// SI base units
+using meters = unit<dimension::length>;
+using kilograms = unit<dimension::mass>;
 using seconds = unit<dimension::time>;
 using amperes = unit<dimension::current>;
 using kelvin = unit<dimension::temperature>;
 using moles = unit<dimension::amount>;
 using candelas = unit<dimension::intensity>;
 
-namespace mks {
-
-using meters = unit<dimension::length>;
-using kilograms = unit<dimension::mass>;
-
+// SI derived units
 using hertz = reciprocal<seconds>;
 using radians = quotient<power<meters, 1>, power<meters, 1>>;
 using steradians = quotient<power<meters, 2>, power<meters, 2>>;
@@ -356,17 +355,6 @@ using becquerels = reciprocal<seconds>;
 using grays = quotient<joules, kilograms>;
 using sieverts = quotient<joules, kilograms>;
 using katals = quotient<moles, seconds>;
-
-} // namespace mks
-
-namespace cgs {
-
-using centimeters = unit<dimension::length>;
-using grams = unit<dimension::mass>;
-
-} // namespace cgs
-
-using namespace mks;
 
 } // namespace si
 
