@@ -52,6 +52,87 @@ ASSERT_SAME(webers, _webers);
 ASSERT_SAME(henries, _henries);
 
 } // namespace B
+
+//------------------------------------------------------------------------------
+namespace C {
+
+using namespace mpl::units::si;
+
+//! Helper metafunction for retrieving a given base unit.
+template<typename _Tx> struct dim {
+    template<typename _Ty> struct fn_pred {
+        using type = mpl::false_type;
+    };
+
+    template<int _Ny> struct fn_pred<mpl::units::detail::unitbase<_Tx, _Ny>> {
+        using type = mpl::true_type;
+    };
+
+    template<typename _Ty> using pred = typename fn_pred<_Ty>::type;
+};
+
+template<typename _Tx> using length = mpl::find<_Tx, dim<mpl::units::dimension::length>::pred>;
+template<typename _Tx> using mass = mpl::find<_Tx, dim<mpl::units::dimension::mass>::pred>;
+template<typename _Tx> using time = mpl::find<_Tx, dim<mpl::units::dimension::time>::pred>;
+template<typename _Tx> using current = mpl::find<_Tx, dim<mpl::units::dimension::current>::pred>;
+
+ASSERT_EQUAL(1, mass<pascals>::power);
+ASSERT_EQUAL(-1, length<pascals>::power);
+ASSERT_EQUAL(-2, time<pascals>::power);
+ASSERT_SAME(mpl::nil, current<pascals>);
+
+ASSERT_EQUAL(1, mass<joules>::power);
+ASSERT_EQUAL(2, length<joules>::power);
+ASSERT_EQUAL(-2, time<joules>::power);
+ASSERT_SAME(mpl::nil, current<joules>);
+
+ASSERT_EQUAL(1, mass<watts>::power);
+ASSERT_EQUAL(2, length<watts>::power);
+ASSERT_EQUAL(-3, time<watts>::power);
+ASSERT_SAME(mpl::nil, current<watts>);
+
+ASSERT_SAME(mpl::nil, mass<coulombs>);
+ASSERT_SAME(mpl::nil, length<coulombs>);
+ASSERT_EQUAL(1, time<coulombs>::power);
+ASSERT_EQUAL(1, current<coulombs>::power);
+
+ASSERT_EQUAL(1, mass<volts>::power);
+ASSERT_EQUAL(2, length<volts>::power);
+ASSERT_EQUAL(-3, time<volts>::power);
+ASSERT_EQUAL(-1, current<volts>::power);
+
+ASSERT_EQUAL(-1, mass<farads>::power);
+ASSERT_EQUAL(-2, length<farads>::power);
+ASSERT_EQUAL(4, time<farads>::power);
+ASSERT_EQUAL(2, current<farads>::power);
+
+ASSERT_EQUAL(1, mass<ohms>::power);
+ASSERT_EQUAL(2, length<ohms>::power);
+ASSERT_EQUAL(-3, time<ohms>::power);
+ASSERT_EQUAL(-2, current<ohms>::power);
+
+ASSERT_EQUAL(-1, mass<siemens>::power);
+ASSERT_EQUAL(-2, length<siemens>::power);
+ASSERT_EQUAL(3, time<siemens>::power);
+ASSERT_EQUAL(2, current<siemens>::power);
+
+ASSERT_EQUAL(1, mass<webers>::power);
+ASSERT_EQUAL(2, length<webers>::power);
+ASSERT_EQUAL(-2, time<webers>::power);
+ASSERT_EQUAL(-1, current<webers>::power);
+
+ASSERT_EQUAL(1, mass<teslas>::power);
+//ASSERT_SAME(mpl::nil, length<teslas>);
+ASSERT_EQUAL(0, length<teslas>::power);
+ASSERT_EQUAL(-2, time<teslas>::power);
+ASSERT_EQUAL(-1, current<teslas>::power);
+
+ASSERT_EQUAL(1, mass<henries>::power);
+ASSERT_EQUAL(2, length<henries>::power);
+ASSERT_EQUAL(-2, time<henries>::power);
+ASSERT_EQUAL(-2, current<henries>::power);
+
+} // namespace C
 } // namespace is_same
 
 ////////////////////////////////////////////////////////////////////////////////
