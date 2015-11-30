@@ -239,86 +239,91 @@ template<typename _Tunit> using unit = typename detail::fn_unit<_Tunit>::type;
 template<typename _Tx, typename _Ty>
 class value {
 
+  private:
+
     _Tx     _value;
 
   public:
+
+    using type = _Tx;
+    using unit = _Ty;
 
     //! Default construction
     value() {}
 
     //! Explicit construction from type
-    explicit value(_Tx const& v)
+    explicit value(type const& v)
         : _value(v) {}
 
     //! Explicit cast to type
-    explicit operator _Tx() const {
+    explicit operator type() const {
         return _value;
     }
 
     //! Addition
-    value<_Tx, _Ty> operator+(value<_Tx, _Ty> const& a) const {
-        return value<_Tx, _Ty>(_value + a._value);
+    value<type, unit> operator+(value<type, unit> const& a) const {
+        return value<type, unit>(_value + a._value);
     }
 
     //! Subtraction
-    value<_Tx, _Ty> operator-(value<_Tx, _Ty> const& a) const {
-        return value<_Tx, _Ty>(_value - a._value);
+    value<type, unit> operator-(value<type, unit> const& a) const {
+        return value<type, unit>(_value - a._value);
     }
 
     //! Scalar multiplication
-    value<_Tx, _Ty> operator*(_Tx const& s) const {
-        return value<_Tx, _Ty>(_value * s);
+    value<type, unit> operator*(type const& s) const {
+        return value<type, unit>(_value * s);
     }
 
     //! Scalar division
-    value<_Tx, _Ty> operator/(_Tx const& s) const {
-        return value<_Tx, _Ty>(_value / s);
+    value<type, unit> operator/(type const& s) const {
+        return value<type, unit>(_value / s);
     }
 
     //! Addition
-    value<_Tx, _Ty>& operator+=(value<_Tx, _Ty> const& a) {
+    value<type, unit>& operator+=(value<type, unit> const& a) {
         _value += a._value;
         return *this;
     }
 
     //! Subtraction
-    value<_Tx, _Ty>& operator-=(value<_Tx, _Ty> const& a) {
+    value<type, unit>& operator-=(value<type, unit> const& a) {
         _value -= a._value;
         return *this;
     }
 
     //! Scalar multiplication
-    value<_Tx, _Ty> operator*=(_Tx const& s) {
+    value<type, unit> operator*=(type const& s) {
         _value *= s;
         return *this;
     }
 
     //! Scalar division
-    value<_Tx, _Ty> operator/=(_Tx const& s) {
+    value<type, unit> operator/=(type const& s) {
         _value /= s;
         return *this;
     }
 
     //! Negation
-    value<_Tx, _Ty> operator-() const {
-        return value<_Tx, _Ty>(-_value);
+    value<type, unit> operator-() const {
+        return value<type, unit>(-_value);
     }
 
     //! Multiplication
     template<typename _Tz>
-    value<_Tx, product<_Ty, _Tz>> operator*(value<_Tx, _Tz> const& a) const {
-        return value<_Tx, product<_Ty, _Tz>>(_value * (_Tx)a);
+    value<type, product<unit, _Tz>> operator*(value<type, _Tz> const& a) const {
+        return value<type, product<unit, _Tz>>(_value * (type)a);
     }
 
     //! Division
     template<typename _Tz>
-    value<_Tx, quotient<_Ty, _Tz>> operator/(value<_Tx, _Tz> const& a) const {
-        return value<_Tx, quotient<_Ty, _Tz>>(_value * (_Tx)a);
+    value<type, quotient<unit, _Tz>> operator/(value<type, _Tz> const& a) const {
+        return value<type, quotient<unit, _Tz>>(_value * (type)a);
     }
 
     //! Division to scalar
-    _Tx operator/(value<_Tx, _Ty> const& a) const {
-        return _value / (_Tx)a;
+    type operator/(value<type, unit> const& a) const {
+        return _value / (type)a;
     }
 };
 
