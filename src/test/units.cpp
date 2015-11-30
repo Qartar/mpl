@@ -313,6 +313,47 @@ void _B(void) {
 }
 
 } // namespace B
+
+//------------------------------------------------------------------------------
+namespace C {
+
+struct X {};
+struct Y {};
+struct Z {};
+struct W {};
+
+Z operator*(X const&, Y const&) { return Z{}; }
+W operator/(X const&, Y const&) { return W{}; }
+
+void _A(void) {
+    auto x = X{};
+    auto y = Y{};
+    auto z = x * y;
+    auto w = x / y;
+
+    ASSERT_SAME(Z, decltype(z));
+    ASSERT_SAME(W, decltype(w));
+}
+
+void _B(void) {
+    auto x = mpl::units::value<X, mpl::units::si::newtons>{};
+    auto y = mpl::units::value<Y, mpl::units::si::meters>{};
+    auto z = x * y;
+
+    ASSERT_SAME(Z, decltype(z)::type);
+    ASSERT_SAME(mpl::units::si::joules, decltype(z)::unit);
+}
+
+void _C(void) {
+    auto x = mpl::units::value<X, mpl::units::si::joules>{};
+    auto y = mpl::units::value<Y, mpl::units::si::seconds>{};
+    auto w = x / y;
+
+    ASSERT_SAME(W, decltype(w)::type);
+    ASSERT_SAME(mpl::units::si::watts, decltype(w)::unit);
+}
+
+} // namespace C
 } // namespace value
 
 } // anonymous namespace

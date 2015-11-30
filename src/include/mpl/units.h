@@ -318,15 +318,15 @@ class value {
     }
 
     //! Multiplication
-    template<typename _Tz>
-    value<type, product<unit, _Tz>> operator*(value<type, _Tz> const& a) const {
-        return value<type, product<unit, _Tz>>(_value * (type)a);
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>> operator*(value<_Tz, _Tw> const& a) const {
+        return value<decltype(_Tx() * _Tz()), product<unit, _Tw>>(_value * (_Tz)a);
     }
 
     //! Division
-    template<typename _Tz>
-    value<type, quotient<unit, _Tz>> operator/(value<type, _Tz> const& a) const {
-        return value<type, quotient<unit, _Tz>>(_value * (type)a);
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>> operator/(value<_Tz, _Tw> const& a) const {
+        return value<decltype(_Tx() / _Tz()), quotient<unit, _Tw>>(_value / (_Tz)a);
     }
 
     //! Division to scalar
