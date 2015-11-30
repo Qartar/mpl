@@ -2,6 +2,7 @@
 #define _mpl_list_h_
 
 #include "mpl/cons.h"
+#include "mpl/logical.h"
 
 namespace mpl {
 
@@ -133,6 +134,26 @@ struct fn_index<nil, _Nx> {
     using type = nil;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `find` metafunction
+template<typename _Tx, template<typename> class _Tpred, typename = void>
+struct fn_find;
+
+template<typename _Tx, typename _Ty, template<typename> class _Tpred>
+struct fn_find<cons<_Tx, _Ty>, _Tpred, enable_if<!_Tpred<_Tx>::value>> {
+    using type = typename fn_find<_Ty, _Tpred>::type;
+};
+
+template<typename _Tx, typename _Ty, template<typename> class _Tpred>
+struct fn_find<cons<_Tx, _Ty>, _Tpred, enable_if<_Tpred<_Tx>::value>> {
+    using type = _Tx;
+};
+
+template<template<typename> class _Tpred>
+struct fn_find<nil, _Tpred, void> {
+    using type = nil;
+};
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,6 +205,17 @@ template<typename _Tx, int _Ny> using remove = typename detail::fn_remove<_Tx, _
  * Metafunction for retrieving the n-th type element from a `list` metatype.
  */
 template<typename _Tx, int _Ny> using index = typename detail::fn_index<_Tx, _Ny>::type;
+
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * find
+ *
+ * Metafunction for retrieving the first type element from a `list` metatype
+ * which satisfies the given predicate metafunction. For retrieving all type
+ * elements which satisfy a predicate use `filter`. (mpl/functional.h)
+ */
+template<typename _Tx, template<typename> class _Tpred>
+using find = typename detail::fn_find<_Tx, _Tpred>::type;
 
 } // namespace mpl
 

@@ -472,4 +472,28 @@ ASSERT_SAME(_J, extend::D::_J);
 } // namespace A
 } // namespace index
 
+////////////////////////////////////////////////////////////////////////////////
+namespace find {
+
+//------------------------------------------------------------------------------
+namespace A {
+
+using _A = mpl::list<>;
+using _B = mpl::list<int>;
+using _C = mpl::list<int, bool*>;
+using _D = mpl::list<int, bool&, float&>;
+
+using _E = mpl::find<_A, std::is_pointer>;
+using _F = mpl::find<_B, std::is_pointer>;
+using _G = mpl::find<_C, std::is_pointer>;
+using _H = mpl::find<_D, std::is_reference>;
+
+ASSERT_SAME(mpl::nil, _E);
+ASSERT_SAME(mpl::nil, _F);
+ASSERT_SAME(bool*, _G);
+ASSERT_SAME(bool&, _H);
+
+} // namespace A
+} // namespace find
+
 } // anonymous namespace
