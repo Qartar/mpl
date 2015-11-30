@@ -13,8 +13,8 @@ namespace units {
  * dimension
  */
 struct dimension {
-    struct length;      //!< Length
     struct mass;        //!< Mass
+    struct length;      //!< Length
     struct time;        //!< Time
     struct current;     //!< Electric current
     struct temperature; //!< Absolute temperature
@@ -335,6 +335,9 @@ namespace mks {
 using meters = unit<dimension::length>;
 using kilograms = unit<dimension::mass>;
 
+using hertz = reciprocal<seconds>;
+using radians = quotient<power<meters, 1>, power<meters, 1>>;
+using steradians = quotient<power<meters, 2>, power<meters, 2>>;
 using newtons = quotient<product<kilograms, meters>, power<seconds, 2>>;
 using pascals = quotient<newtons, power<meters, 2>>;
 using joules = product<newtons, meters>;
@@ -347,6 +350,12 @@ using siemens = reciprocal<ohms>;
 using webers = quotient<joules, amperes>;
 using teslas = quotient<product<volts, seconds>, power<meters, 2>>;
 using henries = quotient<product<volts, seconds>, amperes>;
+using lumens = product<candelas, steradians>;
+using lux = quotient<lumens, power<meters, 2>>;
+using becquerels = reciprocal<seconds>;
+using grays = quotient<joules, kilograms>;
+using sieverts = quotient<joules, kilograms>;
+using katals = quotient<moles, seconds>;
 
 } // namespace mks
 

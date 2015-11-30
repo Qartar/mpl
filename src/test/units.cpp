@@ -75,61 +75,155 @@ template<typename _Tx> using length = mpl::find<_Tx, dim<mpl::units::dimension::
 template<typename _Tx> using mass = mpl::find<_Tx, dim<mpl::units::dimension::mass>::pred>;
 template<typename _Tx> using time = mpl::find<_Tx, dim<mpl::units::dimension::time>::pred>;
 template<typename _Tx> using current = mpl::find<_Tx, dim<mpl::units::dimension::current>::pred>;
+template<typename _Tx> using amount = mpl::find<_Tx, dim<mpl::units::dimension::amount>::pred>;
+template<typename _Tx> using intensity = mpl::find<_Tx, dim<mpl::units::dimension::intensity>::pred>;
+
+ASSERT_SAME(mpl::nil, mass<hertz>);
+ASSERT_SAME(mpl::nil, length<hertz>);
+ASSERT_EQUAL(-1, time<hertz>::power);
+ASSERT_SAME(mpl::nil, current<hertz>);
+ASSERT_SAME(mpl::nil, amount<hertz>);
+ASSERT_SAME(mpl::nil, intensity<hertz>);
+
+ASSERT_SAME(mpl::nil, mass<radians>);
+ASSERT_SAME(mpl::nil, length<radians>);
+ASSERT_SAME(mpl::nil, time<radians>);
+ASSERT_SAME(mpl::nil, current<radians>);
+ASSERT_SAME(mpl::nil, amount<radians>);
+ASSERT_SAME(mpl::nil, intensity<radians>);
+
+ASSERT_SAME(mpl::nil, mass<steradians>);
+ASSERT_SAME(mpl::nil, length<steradians>);
+ASSERT_SAME(mpl::nil, time<steradians>);
+ASSERT_SAME(mpl::nil, current<steradians>);
+ASSERT_SAME(mpl::nil, amount<steradians>);
+ASSERT_SAME(mpl::nil, intensity<steradians>);
+
+ASSERT_EQUAL(1, mass<newtons>::power);
+ASSERT_EQUAL(1, length<newtons>::power);
+ASSERT_EQUAL(-2, time<newtons>::power);
+ASSERT_SAME(mpl::nil, current<newtons>);
+ASSERT_SAME(mpl::nil, amount<newtons>);
+ASSERT_SAME(mpl::nil, intensity<newtons>);
 
 ASSERT_EQUAL(1, mass<pascals>::power);
 ASSERT_EQUAL(-1, length<pascals>::power);
 ASSERT_EQUAL(-2, time<pascals>::power);
 ASSERT_SAME(mpl::nil, current<pascals>);
+ASSERT_SAME(mpl::nil, amount<pascals>);
+ASSERT_SAME(mpl::nil, intensity<pascals>);
 
 ASSERT_EQUAL(1, mass<joules>::power);
 ASSERT_EQUAL(2, length<joules>::power);
 ASSERT_EQUAL(-2, time<joules>::power);
 ASSERT_SAME(mpl::nil, current<joules>);
+ASSERT_SAME(mpl::nil, amount<joules>);
+ASSERT_SAME(mpl::nil, intensity<joules>);
 
 ASSERT_EQUAL(1, mass<watts>::power);
 ASSERT_EQUAL(2, length<watts>::power);
 ASSERT_EQUAL(-3, time<watts>::power);
 ASSERT_SAME(mpl::nil, current<watts>);
+ASSERT_SAME(mpl::nil, amount<watts>);
+ASSERT_SAME(mpl::nil, intensity<watts>);
 
 ASSERT_SAME(mpl::nil, mass<coulombs>);
 ASSERT_SAME(mpl::nil, length<coulombs>);
 ASSERT_EQUAL(1, time<coulombs>::power);
 ASSERT_EQUAL(1, current<coulombs>::power);
+ASSERT_SAME(mpl::nil, amount<coulombs>);
+ASSERT_SAME(mpl::nil, intensity<coulombs>);
 
 ASSERT_EQUAL(1, mass<volts>::power);
 ASSERT_EQUAL(2, length<volts>::power);
 ASSERT_EQUAL(-3, time<volts>::power);
 ASSERT_EQUAL(-1, current<volts>::power);
+ASSERT_SAME(mpl::nil, amount<volts>);
+ASSERT_SAME(mpl::nil, intensity<volts>);
 
 ASSERT_EQUAL(-1, mass<farads>::power);
 ASSERT_EQUAL(-2, length<farads>::power);
 ASSERT_EQUAL(4, time<farads>::power);
 ASSERT_EQUAL(2, current<farads>::power);
+ASSERT_SAME(mpl::nil, amount<farads>);
+ASSERT_SAME(mpl::nil, intensity<farads>);
 
 ASSERT_EQUAL(1, mass<ohms>::power);
 ASSERT_EQUAL(2, length<ohms>::power);
 ASSERT_EQUAL(-3, time<ohms>::power);
 ASSERT_EQUAL(-2, current<ohms>::power);
+ASSERT_SAME(mpl::nil, amount<ohms>);
+ASSERT_SAME(mpl::nil, intensity<ohms>);
 
 ASSERT_EQUAL(-1, mass<siemens>::power);
 ASSERT_EQUAL(-2, length<siemens>::power);
 ASSERT_EQUAL(3, time<siemens>::power);
 ASSERT_EQUAL(2, current<siemens>::power);
+ASSERT_SAME(mpl::nil, amount<siemens>);
+ASSERT_SAME(mpl::nil, intensity<siemens>);
 
 ASSERT_EQUAL(1, mass<webers>::power);
 ASSERT_EQUAL(2, length<webers>::power);
 ASSERT_EQUAL(-2, time<webers>::power);
 ASSERT_EQUAL(-1, current<webers>::power);
+ASSERT_SAME(mpl::nil, amount<webers>);
+ASSERT_SAME(mpl::nil, intensity<webers>);
 
 ASSERT_EQUAL(1, mass<teslas>::power);
 ASSERT_SAME(mpl::nil, length<teslas>);
 ASSERT_EQUAL(-2, time<teslas>::power);
 ASSERT_EQUAL(-1, current<teslas>::power);
+ASSERT_SAME(mpl::nil, amount<teslas>);
+ASSERT_SAME(mpl::nil, intensity<teslas>);
 
 ASSERT_EQUAL(1, mass<henries>::power);
 ASSERT_EQUAL(2, length<henries>::power);
 ASSERT_EQUAL(-2, time<henries>::power);
 ASSERT_EQUAL(-2, current<henries>::power);
+ASSERT_SAME(mpl::nil, amount<henries>);
+ASSERT_SAME(mpl::nil, intensity<henries>);
+
+ASSERT_SAME(mpl::nil, mass<lumens>);
+ASSERT_SAME(mpl::nil, length<lumens>);
+ASSERT_SAME(mpl::nil, time<lumens>);
+ASSERT_SAME(mpl::nil, current<lumens>);
+ASSERT_SAME(mpl::nil, amount<lumens>);
+ASSERT_EQUAL(1, intensity<lumens>::power);
+
+ASSERT_SAME(mpl::nil, mass<lux>);
+ASSERT_EQUAL(-2, length<lux>::power);
+ASSERT_SAME(mpl::nil, time<lux>);
+ASSERT_SAME(mpl::nil, current<lux>);
+ASSERT_SAME(mpl::nil, amount<lux>);
+ASSERT_EQUAL(1, intensity<lux>::power);
+
+ASSERT_SAME(mpl::nil, mass<becquerels>);
+ASSERT_SAME(mpl::nil, length<becquerels>);
+ASSERT_EQUAL(-1, time<becquerels>::power);
+ASSERT_SAME(mpl::nil, current<becquerels>);
+ASSERT_SAME(mpl::nil, amount<becquerels>);
+ASSERT_SAME(mpl::nil, intensity<becquerels>);
+
+ASSERT_SAME(mpl::nil, mass<grays>);
+ASSERT_EQUAL(2, length<grays>::power);
+ASSERT_EQUAL(-2, time<grays>::power);
+ASSERT_SAME(mpl::nil, current<grays>);
+ASSERT_SAME(mpl::nil, amount<grays>);
+ASSERT_SAME(mpl::nil, intensity<grays>);
+
+ASSERT_SAME(mpl::nil, mass<sieverts>);
+ASSERT_EQUAL(2, length<sieverts>::power);
+ASSERT_EQUAL(-2, time<sieverts>::power);
+ASSERT_SAME(mpl::nil, current<sieverts>);
+ASSERT_SAME(mpl::nil, amount<sieverts>);
+ASSERT_SAME(mpl::nil, intensity<sieverts>);
+
+ASSERT_SAME(mpl::nil, mass<katals>);
+ASSERT_SAME(mpl::nil, length<katals>);
+ASSERT_EQUAL(-1, time<katals>::power);
+ASSERT_SAME(mpl::nil, current<katals>);
+ASSERT_EQUAL(1, amount<katals>::power);
+ASSERT_SAME(mpl::nil, intensity<katals>);
 
 } // namespace C
 } // namespace is_same
