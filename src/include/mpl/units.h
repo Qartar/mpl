@@ -352,6 +352,18 @@ using namespace mks;
 } // namespace si
 
 } // namespace units
+
+namespace detail {
+
+////////////////////////////////////////////////////////////////////////////////
+//! Specialization for `is_same`
+template<typename _Tx, typename _Ty>
+struct fn_is_same<_Tx, _Ty, enable_if<units::is_unit<_Tx>::value && units::is_unit<_Ty>::value>> {
+    using type = typename units::detail::fn_is_same<_Tx, _Ty>::type;
+};
+
+} // namespace detail
+
 } // namespace mpl
 
 #endif _mpl_units_h_

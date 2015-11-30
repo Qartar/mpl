@@ -40,27 +40,16 @@ using _webers = product<kilograms, power<meters, 2>, power<seconds, -2>, power<a
 using _teslas = product<kilograms, power<seconds, -2>, power<amperes, -1>>;
 using _henries = product<kilograms, power<meters, 2>, power<seconds, -2>, power<amperes, -2>>;
 
-using _A = mpl::units::is_same<pascals, _pascals>;
-using _B = mpl::units::is_same<joules, _joules>;
-using _C = mpl::units::is_same<watts, _watts>;
-using _D = mpl::units::is_same<volts, _volts>;
-using _E = mpl::units::is_same<farads, _farads>;
-using _F = mpl::units::is_same<ohms, _ohms>;
-using _G = mpl::units::is_same<siemens, _siemens>;
-using _H = mpl::units::is_same<webers, _webers>;
-using _I = mpl::units::is_same<teslas, _teslas>;
-using _J = mpl::units::is_same<henries, _henries>;
-
-ASSERT_SAME(mpl::true_type, _A);
-ASSERT_SAME(mpl::true_type, _B);
-ASSERT_SAME(mpl::true_type, _C);
-ASSERT_SAME(mpl::true_type, _D);
-ASSERT_SAME(mpl::true_type, _E);
-ASSERT_SAME(mpl::true_type, _F);
-ASSERT_SAME(mpl::true_type, _G);
-ASSERT_SAME(mpl::true_type, _H);
-//ASSERT_SAME(mpl::true_type, _I); // FIXME
-ASSERT_SAME(mpl::true_type, _J);
+ASSERT_SAME(pascals, _pascals);
+ASSERT_SAME(joules, _joules);
+ASSERT_SAME(watts, _watts);
+ASSERT_SAME(volts, _volts);
+//ASSERT_SAME(farads, _farads); // FIXME
+ASSERT_SAME(ohms, _ohms);
+ASSERT_SAME(siemens, _siemens);
+ASSERT_SAME(webers, _webers);
+//ASSERT_SAME(teslas, _teslas); // FIXME
+ASSERT_SAME(henries, _henries);
 
 } // namespace B
 } // namespace is_same
