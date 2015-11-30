@@ -11,6 +11,8 @@ namespace units {
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * dimension
+ *
+ * Physical base types for a unit system.
  */
 struct dimension {
     struct mass;        //!< Mass
@@ -25,12 +27,15 @@ struct dimension {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////
-//! The unit metatype is a list of unitbase metatypes.
+//! Fundamental internal type for units. Each `unit` metatype is a `list` of
+//! `unitbase` types.
 template<typename _Tbase, int _Npower = 1> struct unitbase {
     using base = _Tbase;
     static const int power = _Npower;
 };
 
+//! Helper metafunction for raising a unit to a given power. Can be passed as an
+//! argument to other metafunctions such as `map`.
 template<int _Nx> struct fn_raise {
     template<typename _Ty> struct _func;
 
@@ -43,7 +48,7 @@ template<int _Nx> struct fn_raise {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-//!
+//! Implementation of `is_same_base` metafunction
 template<typename _Tx, typename _Ty> struct fn_is_same_base {
     using type = false_type;
 };
@@ -53,6 +58,7 @@ struct fn_is_same_base<unitbase<_Tbase, _Nx>, unitbase<_Tbase, _Ny>> {
     using type = true_type;
 };
 
+//! Helper template for determining whether two unit types have the same base type.
 template<typename _Tx, typename _Ty> using is_same_base = typename fn_is_same_base<_Tx, _Ty>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,23 +67,28 @@ template<typename _Tx, typename _Ty, typename = void> struct fn_is_same_iter {
     using type = false_type;
 };
 
+//! Continuing case; next element of _Ty exists in _Tx, evaluate remaining.
 template<typename _Tx, typename _Ty>
 struct fn_is_same_iter<_Tx, _Ty, enable_if<contains<_Tx, car<_Ty>>::value>> {
     using type = typename fn_is_same_iter<_Tx, cdr<_Ty>>::type;
 };
 
+//! Terminating case; all elements of _Ty exist in _Tx
 template<typename _Tx>
 struct fn_is_same_iter<_Tx, nil> {
     using type = true_type;
 };
 
+//! Helper template, evaluates to true/false type.
 template<typename _Tx, typename _Ty>
 using fn_is_same_iter_t = typename fn_is_same_iter<_Tx, _Ty>::type;
 
+//! Default to false_type.
 template<typename _Tx, typename _Ty, typename = void, typename = void> struct fn_is_same {
     using type = false_type;
 };
 
+//! Specialization for equivalent unit types. 
 template<typename _Tx, typename _Ty>
 struct fn_is_same<_Tx, _Ty,
         enable_if<fn_is_same_iter_t<_Tx, _Ty>::value>,
@@ -91,13 +102,14 @@ template<typename _Tx> struct fn_is_unit {
     using type = false_type;
 };
 
+//! Continuing case; first list element is a unitbase type, evaluate remaining.
 template<typename _Tx, int _Nx, typename _Ty>
 struct fn_is_unit<cons<unitbase<_Tx, _Nx>, _Ty>> {
     using type = typename fn_is_unit<_Ty>::type;
 };
 
-template<>
-struct fn_is_unit<nil> {
+//! Terminating case; all elements were a unitbase type.
+template<> struct fn_is_unit<nil> {
     using type = true_type;
 };
 
@@ -131,23 +143,28 @@ struct fn_append<cons<unitbase<_Tbase, _Nx>, _Tlist>, unitbase<_Tbase, _Ny>, ena
 //! Combine a list of unit and unitbase types into a single unit type.
 template<typename... _Targs> struct fn_combine_iter;
 
+//! Default case; append _Ty onto the output list _Tz and continue iterating through
+//! the input list _Tx.
 template<typename _Tx, typename _Ty, typename _Tz>
 struct fn_combine_iter<_Tx, _Ty, _Tz> {
-    using next = typename fn_append<_Tz, _Tx>::type;
-    using type = typename fn_combine_iter<car<_Ty>, cdr<_Ty>, next>::type;
+    using next = typename fn_append<_Tz, _Ty>::type;
+    using type = typename fn_combine_iter<cdr<_Tx>, car<_Tx>, next>::type;
 };
 
-template<typename _Tx, typename _Tz>
-struct fn_combine_iter<_Tx, nil, _Tz> {
-    using type = typename fn_append<_Tz, _Tx>::type;
+//! Terminating case; append _Ty onto the output list _Tz.
+template<typename _Ty, typename _Tz>
+struct fn_combine_iter<nil, _Ty, _Tz> {
+    using type = typename fn_append<_Tz, _Ty>::type;
 };
 
+//! Entry point; begin iterating on the second element in the input list _Tx
+//! with the first element in _Ty and an initial empty output list.
 template<typename _Tx> struct fn_combine {
-    using type = typename fn_combine_iter<car<_Tx>, cdr<_Tx>, nil>::type;
+    using type = typename fn_combine_iter<cdr<_Tx>, car<_Tx>, nil>::type;
 };
 
-template<>
-struct fn_combine<nil> {
+//! Specialization for an empty list.
+template<> struct fn_combine<nil> {
     using type = nil;
 };
 
@@ -260,31 +277,31 @@ class value {
         return _value;
     }
 
-    //! Addition
+    //! Addition by unit type
     template<typename _Tz>
     value<type, unit> operator+(value<type, _Tz> const& a) const {
         static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
         return value<type, unit>(_value + a._value);
     }
 
-    //! Subtraction
+    //! Subtraction by unit type
     template<typename _Tz>
     value<type, unit> operator-(value<type, _Tz> const& a) const {
         static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
         return value<type, unit>(_value - a._value);
     }
 
-    //! Scalar multiplication
+    //! Multiplication by scalar
     value<type, unit> operator*(type const& s) const {
         return value<type, unit>(_value * s);
     }
 
-    //! Scalar division
+    //! Division by scalar
     value<type, unit> operator/(type const& s) const {
         return value<type, unit>(_value / s);
     }
 
-    //! Addition
+    //! Addition by unit type
     template<typename _Tz>
     value<type, unit>& operator+=(value<type, _Tz> const& a) {
         static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
@@ -292,7 +309,7 @@ class value {
         return *this;
     }
 
-    //! Subtraction
+    //! Subtraction by unit type
     template<typename _Tz>
     value<type, unit>& operator-=(value<type, _Tz> const& a) {
         static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
@@ -300,13 +317,13 @@ class value {
         return *this;
     }
 
-    //! Scalar multiplication
+    //! Multiplication by scalar
     value<type, unit> operator*=(type const& s) {
         _value *= s;
         return *this;
     }
 
-    //! Scalar division
+    //! Division by scalar
     value<type, unit> operator/=(type const& s) {
         _value /= s;
         return *this;
@@ -317,19 +334,19 @@ class value {
         return value<type, unit>(-_value);
     }
 
-    //! Multiplication
+    //! Multiplication by unit type
     template<typename _Tz, typename _Tw>
     value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>> operator*(value<_Tz, _Tw> const& a) const {
         return value<decltype(_Tx() * _Tz()), product<unit, _Tw>>(_value * (_Tz)a);
     }
 
-    //! Division
+    //! Division by unit type
     template<typename _Tz, typename _Tw>
     value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>> operator/(value<_Tz, _Tw> const& a) const {
         return value<decltype(_Tx() / _Tz()), quotient<unit, _Tw>>(_value / (_Tz)a);
     }
 
-    //! Division to scalar
+    //! Division by same type
     type operator/(value<type, unit> const& a) const {
         return _value / (type)a;
     }
