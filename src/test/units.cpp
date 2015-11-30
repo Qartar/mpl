@@ -29,17 +29,38 @@ namespace B {
 using namespace mpl::units;
 using namespace mpl::units::si;
 
-using _pascals = quotient<kilograms, product<meters, power<seconds, 2>>>;
-using _joules0 = product<kilograms, power<quotient<meters, seconds>, 2>>;
-using _joules1 = product<kilograms, quotient<power<meters, 2>, power<seconds, 2>>>;
+using _pascals = product<kilograms, power<meters, -1>, power<seconds, -2>>;
+using _joules = product<kilograms, power<meters, 2>, power<seconds, -2>>;
+using _watts = product<kilograms, power<meters, 2>, power<seconds, -3>>;
+using _volts = product<kilograms, power<meters, 2>, power<seconds, -3>, power<amperes, -1>>;
+using _farads = product<power<kilograms, -1>, power<meters, -2>, power<seconds, 4>, power<amperes, 2>>;
+using _ohms = product<kilograms, power<meters, 2>, power<seconds, -3>, power<amperes, -2>>;
+using _siemens = product<power<kilograms, -1>, power<meters, -2>, power<seconds, 3>, power<amperes, 2>>;
+using _webers = product<kilograms, power<meters, 2>, power<seconds, -2>, power<amperes, -1>>;
+using _teslas = product<kilograms, power<seconds, -2>, power<amperes, -1>>;
+using _henries = product<kilograms, power<meters, 2>, power<seconds, -2>, power<amperes, -2>>;
 
 using _A = mpl::units::is_same<pascals, _pascals>;
-using _B = mpl::units::is_same<joules, _joules0>;
-using _C = mpl::units::is_same<joules, _joules1>;
+using _B = mpl::units::is_same<joules, _joules>;
+using _C = mpl::units::is_same<watts, _watts>;
+using _D = mpl::units::is_same<volts, _volts>;
+using _E = mpl::units::is_same<farads, _farads>;
+using _F = mpl::units::is_same<ohms, _ohms>;
+using _G = mpl::units::is_same<siemens, _siemens>;
+using _H = mpl::units::is_same<webers, _webers>;
+using _I = mpl::units::is_same<teslas, _teslas>;
+using _J = mpl::units::is_same<henries, _henries>;
 
 ASSERT_SAME(mpl::true_type, _A);
 ASSERT_SAME(mpl::true_type, _B);
 ASSERT_SAME(mpl::true_type, _C);
+ASSERT_SAME(mpl::true_type, _D);
+ASSERT_SAME(mpl::true_type, _E);
+ASSERT_SAME(mpl::true_type, _F);
+ASSERT_SAME(mpl::true_type, _G);
+ASSERT_SAME(mpl::true_type, _H);
+//ASSERT_SAME(mpl::true_type, _I); // FIXME
+ASSERT_SAME(mpl::true_type, _J);
 
 } // namespace B
 } // namespace is_same

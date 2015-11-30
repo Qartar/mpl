@@ -149,8 +149,8 @@ template<typename _Tunit> struct fn_unit {
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `product` metafunction
-template<typename _Tx, typename _Ty> struct fn_product {
-    using type = typename fn_combine<extend<_Tx, _Ty>>::type;
+template<typename... _Targs> struct fn_product {
+    using type = typename fn_combine<extend<_Targs...>>::type;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ template<typename _Tx, int _Ny> struct fn_power {
  *
  * Metafunction which takes two unit metatypes and evaluates to their product.
  */
-template<typename _Tx, typename _Ty> using product = typename detail::fn_product<_Tx, _Ty>::type;
+template<typename... _Targs> using product = typename detail::fn_product<_Targs...>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
@@ -297,18 +297,18 @@ class value {
     //! Multiplication
     template<typename _Tz>
     value<_Tx, product<_Ty, _Tz>> operator*(value<_Tx, _Tz> const& a) const {
-        return value<_Tx, product<_Ty, _Tz>>(_value * a._value);
+        return value<_Tx, product<_Ty, _Tz>>(_value * (_Tx)a);
     }
 
     //! Division
     template<typename _Tz>
     value<_Tx, quotient<_Ty, _Tz>> operator/(value<_Tx, _Tz> const& a) const {
-        return value<_Tx, quotient<_Ty, _Tz>>(_value * a._value);
+        return value<_Tx, quotient<_Ty, _Tz>>(_value * (_Tx)a);
     }
 
     //! Division to scalar
     _Tx operator/(value<_Tx, _Ty> const& a) const {
-        return _value / a._value;
+        return _value / (_Tx)a;
     }
 };
 
