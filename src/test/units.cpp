@@ -270,6 +270,49 @@ void _fA(_A x, _A y) {
 }
 
 } // namespace A
+
+//------------------------------------------------------------------------------
+namespace B {
+
+void _A(void) {
+    auto a = mpl::units::value<double, mpl::units::si::newtons>(1.0);
+    auto b = mpl::units::value<double, mpl::units::si::meters>(2.0);
+    auto c = mpl::units::value<double, mpl::units::si::joules>(3.0);
+    auto d = a * b;
+    auto e = c / d;
+    auto f = c + d;
+    auto g = c - d;
+
+    ASSERT_SAME(mpl::units::si::joules, decltype(d)::unit);
+    ASSERT_SAME(mpl::units::si::joules, decltype(f)::unit);
+    ASSERT_SAME(mpl::units::si::joules, decltype(g)::unit);
+
+    ASSERT_SAME(double, decltype(d)::type);
+    ASSERT_SAME(double, decltype(e));
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(double, decltype(g)::type);
+}
+
+void _B(void) {
+    auto a = mpl::units::value<double, mpl::units::si::joules>(4.0);
+    auto b = mpl::units::value<double, mpl::units::si::seconds>(5.0);
+    auto c = mpl::units::value<double, mpl::units::si::watts>(6.0);
+    auto d = a / b;
+    auto e = c / d;
+    auto f = c + d;
+    auto g = c - d;
+
+    ASSERT_SAME(mpl::units::si::watts, decltype(d)::unit);
+    ASSERT_SAME(mpl::units::si::watts, decltype(f)::unit);
+    ASSERT_SAME(mpl::units::si::watts, decltype(g)::unit);
+
+    ASSERT_SAME(double, decltype(d)::type);
+    ASSERT_SAME(double, decltype(e));
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(double, decltype(g)::type);
+}
+
+} // namespace B
 } // namespace value
 
 } // anonymous namespace

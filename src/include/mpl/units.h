@@ -261,12 +261,16 @@ class value {
     }
 
     //! Addition
-    value<type, unit> operator+(value<type, unit> const& a) const {
+    template<typename _Tz>
+    value<type, unit> operator+(value<type, _Tz> const& a) const {
+        static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
         return value<type, unit>(_value + a._value);
     }
 
     //! Subtraction
-    value<type, unit> operator-(value<type, unit> const& a) const {
+    template<typename _Tz>
+    value<type, unit> operator-(value<type, _Tz> const& a) const {
+        static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
         return value<type, unit>(_value - a._value);
     }
 
@@ -281,13 +285,17 @@ class value {
     }
 
     //! Addition
-    value<type, unit>& operator+=(value<type, unit> const& a) {
+    template<typename _Tz>
+    value<type, unit>& operator+=(value<type, _Tz> const& a) {
+        static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
         _value += a._value;
         return *this;
     }
 
     //! Subtraction
-    value<type, unit>& operator-=(value<type, unit> const& a) {
+    template<typename _Tz>
+    value<type, unit>& operator-=(value<type, _Tz> const& a) {
+        static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
         _value -= a._value;
         return *this;
     }
