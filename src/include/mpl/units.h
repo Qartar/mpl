@@ -107,14 +107,24 @@ template<typename _Tx, typename _Ty, typename = void> struct fn_append {
     using type = cons<car<_Tx>, typename fn_append<cdr<_Tx>, _Ty>::type>;
 };
 
+//! Append _Ty if there are no units in the list with the same base unit.
 template<typename _Tx, typename _Ty>
 struct fn_append < _Tx, _Ty, enable_if < !contains<_Tx, _Ty, is_same_base>::value >> {
     using type = typename append<_Tx, _Ty>;
 };
 
+//! If _Ty has the same base unit as the next element in the unit list then
+//! combine them and insert it in front of the remainder of the unit list.
 template<typename _Tbase, typename _Tlist, int _Nx, int _Ny>
-struct fn_append<cons<unitbase<_Tbase, _Nx>, _Tlist>, unitbase<_Tbase, _Ny>> {
+struct fn_append<cons<unitbase<_Tbase, _Nx>, _Tlist>, unitbase<_Tbase, _Ny>, enable_if<!!(_Nx + _Ny)>> {
     using type = cons < unitbase < _Tbase, _Nx + _Ny >, _Tlist >;
+};
+
+//! If the unit powers sum to zero then skip this base unit and return the
+//! remainder of the unit list.
+template<typename _Tbase, typename _Tlist, int _Nx, int _Ny>
+struct fn_append<cons<unitbase<_Tbase, _Nx>, _Tlist>, unitbase<_Tbase, _Ny>, enable_if<!(_Nx + _Ny)>> {
+    using type = _Tlist;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

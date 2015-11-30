@@ -48,7 +48,7 @@ ASSERT_SAME(volts, _volts);
 ASSERT_SAME(ohms, _ohms);
 ASSERT_SAME(siemens, _siemens);
 ASSERT_SAME(webers, _webers);
-//ASSERT_SAME(teslas, _teslas); // FIXME
+ASSERT_SAME(teslas, _teslas);
 ASSERT_SAME(henries, _henries);
 
 } // namespace B
@@ -122,8 +122,7 @@ ASSERT_EQUAL(-2, time<webers>::power);
 ASSERT_EQUAL(-1, current<webers>::power);
 
 ASSERT_EQUAL(1, mass<teslas>::power);
-//ASSERT_SAME(mpl::nil, length<teslas>);
-ASSERT_EQUAL(0, length<teslas>::power);
+ASSERT_SAME(mpl::nil, length<teslas>);
 ASSERT_EQUAL(-2, time<teslas>::power);
 ASSERT_EQUAL(-1, current<teslas>::power);
 
