@@ -11,12 +11,17 @@ namespace detail {
 
 ///////////////////////////////////////////////////////////////////////////////
 //! Implementation of `is_same` metafunction
-template<typename _Tx, typename _Ty> struct fn_is_same {
+template<typename _Tx, typename _Ty> struct fn_is_same_impl {
     using type = false_type;
 };
 
-template<typename _Tx> struct fn_is_same<_Tx, _Tx> {
+template<typename _Tx> struct fn_is_same_impl<_Tx, _Tx> {
     using type = true_type;
+};
+
+//! Use a layer of indirection to allow specialization.
+template<typename _Tx, typename _Ty, typename = void> struct fn_is_same {
+    using type = typename fn_is_same_impl<_Tx, _Ty>::type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
