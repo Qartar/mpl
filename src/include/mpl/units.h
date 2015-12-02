@@ -181,10 +181,15 @@ template<typename... _Targs> struct fn_product {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of `power` metafunction
+//! Implementation of `power` metafunction
 template<typename _Tx, int _Ny> struct fn_power {
     using type = map<typename fn_raise<_Ny>::func, _Tx>;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+//! Divide operation delegate. C++ does not allow explicit specialization of
+//! template functions, this is a workaround for that limitation.
+template<typename _Tx, typename _Ty, typename _Tz, typename _Tw, typename = void> struct divide;
 
 } // namespace detail
 
@@ -340,15 +345,13 @@ class value {
         return value<decltype(_Tx() * _Tz()), product<unit, _Tw>>(_value * (_Tz)a);
     }
 
-    //! Division by unit type
+    //! Division by unit type and same type via detail::divide delegate.
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>> operator/(value<_Tz, _Tw> const& a) const {
-        return value<decltype(_Tx() / _Tz()), quotient<unit, _Tw>>(_value / (_Tz)a);
-    }
+    using divide = detail::divide<_Tx, _Ty, _Tz, _Tw>;
 
-    //! Division by same type
-    type operator/(value<type, unit> const& a) const {
-        return _value / (type)a;
+    template<typename _Tz, typename _Tw>
+    typename divide<_Tz, _Tw>::rtype operator/(value<_Tz, _Tw> const& a) const {
+        return divide<_Tz, _Tw>::func(*this, a);
     }
 };
 
@@ -387,6 +390,35 @@ using sieverts = quotient<joules, kilograms>;
 using katals = quotient<moles, seconds>;
 
 } // namespace si
+
+namespace detail {
+
+////////////////////////////////////////////////////////////////////////////////
+//! Specializations for divide operation delegates. C++ does not allow explicit
+//! specialization of template functions. These specializations need to be
+//! defined after the definition of the value type.
+
+//! Division by unit type
+template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
+struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<!is_same<_Ty, _Tw>::value>> {
+    using rtype = value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>>;
+
+    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
+        return rtype((_Tx)lhs / (_Tz)rhs);
+    }
+};
+
+//! Division by same type
+template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
+struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<is_same<_Ty, _Tw>::value>> {
+    using rtype = decltype(_Tx() / _Tz());
+
+    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
+        return (_Tx)lhs / (_Tz)rhs;
+    }
+};
+
+} // namespace detail
 
 } // namespace units
 

@@ -353,6 +353,40 @@ void _C(void) {
     ASSERT_SAME(mpl::units::si::watts, decltype(w)::unit);
 }
 
+void _D(void) {
+    auto x = mpl::units::value<X, mpl::units::si::joules>{};
+    auto y = mpl::units::value<Y, mpl::units::si::joules>{};
+    auto w = x / y;
+
+    ASSERT_SAME(W, decltype(w));
+}
+
+void _E(void) {
+    auto x = mpl::units::value<int, mpl::units::si::joules>{};
+    auto y = mpl::units::value<int, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+    auto z = x / y;
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    ASSERT_SAME(decltype(z), int);
+}
+
+void _F(void) {
+    auto x = mpl::units::value<X, mpl::units::si::joules>{};
+    auto y = mpl::units::value<Y, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+    auto w = x / y;
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    ASSERT_SAME(W, decltype(w));
+}
+
 } // namespace C
 } // namespace value
 
