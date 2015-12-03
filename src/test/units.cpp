@@ -40,16 +40,20 @@ using _webers = product<kilograms, power<meters, 2>, power<seconds, -2>, power<a
 using _teslas = product<kilograms, power<seconds, -2>, power<amperes, -1>>;
 using _henries = product<kilograms, power<meters, 2>, power<seconds, -2>, power<amperes, -2>>;
 
-ASSERT_SAME(pascals, _pascals);
-ASSERT_SAME(joules, _joules);
-ASSERT_SAME(watts, _watts);
-ASSERT_SAME(volts, _volts);
-//ASSERT_SAME(farads, _farads); // FIXME
-ASSERT_SAME(ohms, _ohms);
-ASSERT_SAME(siemens, _siemens);
-ASSERT_SAME(webers, _webers);
-ASSERT_SAME(teslas, _teslas);
-ASSERT_SAME(henries, _henries);
+#define ASSERT_SAME_UNIT(x, y)                                                  \
+    using _B##x##y = mpl::is_same<x,y>;                                         \
+    ASSERT_SAME(mpl::true_type, _B##x##y)
+
+ASSERT_SAME_UNIT(pascals, _pascals);
+ASSERT_SAME_UNIT(joules, _joules);
+ASSERT_SAME_UNIT(watts, _watts);
+ASSERT_SAME_UNIT(volts, _volts);
+ASSERT_SAME_UNIT(farads, _farads);
+ASSERT_SAME_UNIT(ohms, _ohms);
+ASSERT_SAME_UNIT(siemens, _siemens);
+ASSERT_SAME_UNIT(webers, _webers);
+ASSERT_SAME_UNIT(teslas, _teslas);
+ASSERT_SAME_UNIT(henries, _henries);
 
 } // namespace B
 
