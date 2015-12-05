@@ -300,6 +300,37 @@ void _B(void) {
     ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(c)::unit);
 }
 
+void _C(void) {
+    auto a = mpl::units::value<double, mpl::units::si::meters>(1.0);
+
+    auto b = a * 2;
+    auto c = a * 2.0f;
+
+    ASSERT_SAME(decltype(a), decltype(b));
+    ASSERT_SAME(decltype(a), decltype(c));
+
+    auto d = a / 2;
+    auto e = a / 2.0f;
+
+    ASSERT_SAME(decltype(a), decltype(d));
+    ASSERT_SAME(decltype(a), decltype(e));
+
+    auto f = 2 * a;
+    auto g = 2.0f * a;
+
+    ASSERT_SAME(decltype(a), decltype(f));
+    ASSERT_SAME(decltype(a), decltype(g));
+
+    auto h = 2 / a;
+    auto i = 2.0f / a;
+
+    ASSERT_SAME(decltype(a)::type, decltype(h)::type);
+    ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(h)::unit);
+
+    ASSERT_SAME(decltype(a)::type, decltype(i)::type);
+    ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(i)::unit);
+}
+
 } // namespace A
 
 //------------------------------------------------------------------------------
