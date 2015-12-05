@@ -256,21 +256,48 @@ namespace value {
 //------------------------------------------------------------------------------
 namespace A {
 
-using _A = mpl::units::value<int, mpl::nil>;
+void _A(void) {
+    auto x = mpl::units::value<int, mpl::units::si::meters>(1);
+    auto y = mpl::units::value<int, mpl::units::si::meters>(2);
 
-void _fA(_A x, _A y) {
-    _A _a = x + y;
-    _A _b = x - y;
-    _A _c = x * 2;
-    _A _d = x / 2;
+    ASSERT_SAME(decltype(x), decltype(y));
 
-    _A _e = x += y;
-    _A _f = x -= y;
-    _A _g = x *= 2;
-    _A _h = x /= 2;
+    auto a = x + y;
+    auto b = x - y;
+    auto c = x * 2;
+    auto d = x / 2;
 
-    _A _i = -x;
-    int _j = x / y;
+    auto e = x += y;
+    auto f = x -= y;
+    auto g = x *= 2;
+    auto h = x /= 2;
+
+    auto i = -x;
+    auto j = x / y;
+
+    ASSERT_SAME(decltype(x), decltype(a));
+    ASSERT_SAME(decltype(x), decltype(b));
+    ASSERT_SAME(decltype(x), decltype(c));
+    ASSERT_SAME(decltype(x), decltype(d));
+
+    ASSERT_SAME(decltype(x), decltype(e));
+    ASSERT_SAME(decltype(x), decltype(f));
+    ASSERT_SAME(decltype(x), decltype(g));
+    ASSERT_SAME(decltype(x), decltype(h));
+
+    ASSERT_SAME(decltype(x), decltype(i));
+    ASSERT_SAME(decltype(x)::type, decltype(j));
+}
+
+void _B(void) {
+    auto a = mpl::units::value<int, mpl::units::si::meters>(1);
+
+    auto b = 2 * a;
+    auto c = 2 / a;
+
+    ASSERT_SAME(decltype(a), decltype(b));
+    ASSERT_SAME(decltype(a)::type, decltype(c)::type);
+    ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(c)::unit);
 }
 
 } // namespace A

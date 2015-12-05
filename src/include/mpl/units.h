@@ -306,6 +306,16 @@ class value {
         return value<type, unit>(_value / s);
     }
 
+    //! Multiplication of scalar
+    friend value<type, unit> operator*(type const& lhs, value<type, unit> const& rhs) {
+        return value<type, unit>(lhs * rhs._value);
+    }
+
+    //! Division of scalar
+    friend value<type, reciprocal<unit>> operator/(type const& lhs, value<type, unit> const& rhs) {
+        return value<type, reciprocal<unit>>(lhs / rhs._value);
+    }
+
     //! Addition by unit type
     template<typename _Tz>
     value<type, unit>& operator+=(value<type, _Tz> const& a) {
