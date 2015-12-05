@@ -297,23 +297,27 @@ class value {
     }
 
     //! Multiplication by scalar
-    value<type, unit> operator*(type const& s) const {
-        return value<type, unit>(_value * s);
+    template<typename _Tz>
+    value<decltype(_Tx() * _Tz()), unit> operator*(_Tz const& s) const {
+        return value<decltype(_Tx() * _Tz()), unit>(_value * s);
     }
 
     //! Division by scalar
-    value<type, unit> operator/(type const& s) const {
-        return value<type, unit>(_value / s);
+    template<typename _Tz>
+    value<decltype(_Tx() * _Tz()), unit> operator/(_Tz const& s) const {
+        return value<decltype(_Tx() * _Tz()), unit>(_value / s);
     }
 
     //! Multiplication of scalar
-    friend value<type, unit> operator*(type const& lhs, value<type, unit> const& rhs) {
-        return value<type, unit>(lhs * rhs._value);
+    template<typename _Tz>
+    friend value<decltype(_Tx() / _Tz()), unit> operator*(_Tz const& lhs, value<type, unit> const& rhs) {
+        return value<decltype(_Tx() / _Tz()), unit>(lhs * rhs._value);
     }
 
     //! Division of scalar
-    friend value<type, reciprocal<unit>> operator/(type const& lhs, value<type, unit> const& rhs) {
-        return value<type, reciprocal<unit>>(lhs / rhs._value);
+    template<typename _Tz>
+    friend value<decltype(_Tx() / _Tz()), reciprocal<unit>> operator/(_Tz const& lhs, value<type, unit> const& rhs) {
+        return value<decltype(_Tx() / _Tz()), reciprocal<unit>>(lhs / rhs._value);
     }
 
     //! Addition by unit type

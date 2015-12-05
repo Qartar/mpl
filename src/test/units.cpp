@@ -1,5 +1,7 @@
 #include "mpl_test.h"
 
+#include <cstdint>
+
 #include "mpl/units.h"
 #include "mpl/list.h"
 
@@ -329,6 +331,48 @@ void _C(void) {
 
     ASSERT_SAME(decltype(a)::type, decltype(i)::type);
     ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(i)::unit);
+}
+
+void _D(void) {
+    auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
+    auto b = mpl::units::value<int32_t, mpl::units::si::meters>(1);
+
+    auto c = a * 2.0;
+    auto d = b * 2.0;
+    auto e = b * 2ll;
+
+    ASSERT_SAME(double, decltype(c)::type);
+    ASSERT_SAME(double, decltype(d)::type);
+    ASSERT_SAME(int64_t, decltype(e)::type);
+
+    auto f = 2.0 * a;
+    auto g = 2.0 * b;
+    auto h = 2ll * b;
+
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(double, decltype(g)::type);
+    ASSERT_SAME(int64_t, decltype(h)::type);
+}
+
+void _E(void) {
+    auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
+    auto b = mpl::units::value<int32_t, mpl::units::si::meters>(1);
+
+    auto c = a / 2.0;
+    auto d = b / 2.0;
+    auto e = b / 2ll;
+
+    ASSERT_SAME(double, decltype(c)::type);
+    ASSERT_SAME(double, decltype(d)::type);
+    ASSERT_SAME(int64_t, decltype(e)::type);
+
+    auto f = 2.0 / a;
+    auto g = 2.0 / b;
+    auto h = 2ll / b;
+
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(double, decltype(g)::type);
+    ASSERT_SAME(int64_t, decltype(h)::type);
 }
 
 } // namespace A
