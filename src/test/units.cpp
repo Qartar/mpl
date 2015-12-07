@@ -493,6 +493,19 @@ void _F(void) {
     ASSERT_SAME(W, decltype(w));
 }
 
+void _G(void) {
+    auto x = mpl::units::value<int, mpl::units::si::joules>{};
+    auto y = mpl::units::value<int, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+    decltype(x) z = y;
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    ASSERT_SAME(decltype(x), decltype(z));
+}
+
 } // namespace C
 } // namespace value
 

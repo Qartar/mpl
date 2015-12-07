@@ -282,6 +282,13 @@ class value {
         return _value;
     }
 
+    //! Implicit cast to value with equivalent units
+    template<typename _Tz, typename _Tw>
+    operator value<_Tz, _Tw>() const {
+        static_assert(is_same<unit, _Tw>::value, "Cannot convert to value with different units.");
+        return value<_Tz, _Tw>((_Tz)_value);
+    }
+
     //! Addition by unit type
     template<typename _Tz>
     value<type, unit> operator+(value<type, _Tz> const& a) const {
