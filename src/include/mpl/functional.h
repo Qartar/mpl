@@ -3,6 +3,7 @@
 
 #include "mpl/cons.h"
 #include "mpl/list.h"
+#include "mpl/logical.h"
 
 namespace mpl {
 
@@ -27,12 +28,12 @@ struct fn_map<_Tfunc, nil> {
 template<template<typename> class _Tpred, typename _Tlist, typename = void> struct fn_filter;
 
 template<template<typename> class _Tpred, typename _Tx, typename _Ty>
-struct fn_filter < _Tpred, cons<_Tx, _Ty>, std::enable_if_t < !_Tpred<_Tx>::value >> {
+struct fn_filter < _Tpred, cons<_Tx, _Ty>, enable_if<!_Tpred<_Tx>::value>> {
     using type = typename fn_filter<_Tpred, _Ty>::type;
 };
 
 template<template<typename> class _Tpred, typename _Tx, typename _Ty>
-struct fn_filter<_Tpred, cons<_Tx, _Ty>, std::enable_if_t<_Tpred<_Tx>::value>> {
+struct fn_filter<_Tpred, cons<_Tx, _Ty>, enable_if<_Tpred<_Tx>::value>> {
     using type = cons<_Tx, typename fn_filter<_Tpred, _Ty>::type>;
 };
 
