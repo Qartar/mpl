@@ -11,7 +11,7 @@ namespace {
 namespace is_same {
 
 //------------------------------------------------------------------------------
-namespace A {
+namespace test_identity {
 
 using _A = mpl::units::is_same<mpl::units::si::meters, mpl::units::si::meters>;
 using _B = mpl::units::is_same<mpl::units::si::meters, mpl::units::si::seconds>;
@@ -23,10 +23,10 @@ ASSERT_SAME(mpl::false_type, _B);
 ASSERT_SAME(mpl::false_type, _C);
 ASSERT_SAME(mpl::true_type, _D);
 
-} // namespace A
+} // namespace test_identity
 
 //------------------------------------------------------------------------------
-namespace B {
+namespace test_derived_identity {
 
 using namespace mpl::units;
 using namespace mpl::units::si;
@@ -57,10 +57,10 @@ ASSERT_SAME_UNIT(webers, _webers);
 ASSERT_SAME_UNIT(teslas, _teslas);
 ASSERT_SAME_UNIT(henries, _henries);
 
-} // namespace B
+} // namespace test_derived_identity
 
 //------------------------------------------------------------------------------
-namespace C {
+namespace test_derived_units {
 
 using namespace mpl::units::si;
 
@@ -231,14 +231,14 @@ ASSERT_SAME(mpl::nil, current<katals>);
 ASSERT_EQUAL(1, amount<katals>::power);
 ASSERT_SAME(mpl::nil, intensity<katals>);
 
-} // namespace C
+} // namespace test_derived_units
 } // namespace is_same
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace is_unit {
 
 //------------------------------------------------------------------------------
-namespace A {
+namespace test_units {
 
 template<typename T>
 using is_unit = mpl::units::is_unit<T>;
@@ -249,16 +249,16 @@ ASSERT_SAME(mpl::true_type, is_unit<mpl::units::unit<void>>);
 ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::meters>);
 ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::newtons>);
 
-} // namespace A
+} // namespace test_units
 } // namespace is_unit
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace value {
 
 //------------------------------------------------------------------------------
-namespace A {
+namespace test_no_conversion {
 
-void _A(void) {
+void test_operators(void) {
     auto x = mpl::units::value<int, mpl::units::si::meters>(1);
     auto y = mpl::units::value<int, mpl::units::si::meters>(2);
 
@@ -291,7 +291,7 @@ void _A(void) {
     ASSERT_SAME(decltype(x)::type, decltype(j));
 }
 
-void _B(void) {
+void test_friend_operators(void) {
     auto a = mpl::units::value<int, mpl::units::si::meters>(1);
 
     auto b = 2 * a;
@@ -302,7 +302,7 @@ void _B(void) {
     ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(c)::unit);
 }
 
-void _C(void) {
+void test_implicit_casts(void) {
     auto a = mpl::units::value<double, mpl::units::si::meters>(1.0);
 
     auto b = a * 2;
@@ -333,7 +333,7 @@ void _C(void) {
     ASSERT_SAME(mpl::units::reciprocal<typename decltype(a)::unit>, decltype(i)::unit);
 }
 
-void _D(void) {
+void test_implicit_promotion_multiplication(void) {
     auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
     auto b = mpl::units::value<int32_t, mpl::units::si::meters>(1);
 
@@ -354,7 +354,7 @@ void _D(void) {
     ASSERT_SAME(int64_t, decltype(h)::type);
 }
 
-void _E(void) {
+void test_implicit_promotion_division(void) {
     auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
     auto b = mpl::units::value<int32_t, mpl::units::si::meters>(1);
 
@@ -375,12 +375,12 @@ void _E(void) {
     ASSERT_SAME(int64_t, decltype(h)::type);
 }
 
-} // namespace A
+} // namespace test_no_conversion
 
 //------------------------------------------------------------------------------
-namespace B {
+namespace test_conversion {
 
-void _A(void) {
+void test_units_multiplication(void) {
     auto a = mpl::units::value<double, mpl::units::si::newtons>(1.0);
     auto b = mpl::units::value<double, mpl::units::si::meters>(2.0);
     auto c = mpl::units::value<double, mpl::units::si::joules>(3.0);
@@ -399,7 +399,7 @@ void _A(void) {
     ASSERT_SAME(double, decltype(g)::type);
 }
 
-void _B(void) {
+void test_units_division(void) {
     auto a = mpl::units::value<double, mpl::units::si::joules>(4.0);
     auto b = mpl::units::value<double, mpl::units::si::seconds>(5.0);
     auto c = mpl::units::value<double, mpl::units::si::watts>(6.0);
@@ -418,10 +418,10 @@ void _B(void) {
     ASSERT_SAME(double, decltype(g)::type);
 }
 
-} // namespace B
+} // namespace test_conversion
 
 //------------------------------------------------------------------------------
-namespace C {
+namespace test_base_conversion {
 
 struct X {};
 struct Y {};
@@ -431,7 +431,7 @@ struct W {};
 Z operator*(X const&, Y const&) { return Z{}; }
 W operator/(X const&, Y const&) { return W{}; }
 
-void _A(void) {
+void internal_test_operators(void) {
     auto x = X{};
     auto y = Y{};
     auto z = x * y;
@@ -441,7 +441,7 @@ void _A(void) {
     ASSERT_SAME(W, decltype(w));
 }
 
-void _B(void) {
+void test_multiplication_with_base_conversion(void) {
     auto x = mpl::units::value<X, mpl::units::si::newtons>{};
     auto y = mpl::units::value<Y, mpl::units::si::meters>{};
     auto z = x * y;
@@ -450,7 +450,7 @@ void _B(void) {
     ASSERT_SAME(mpl::units::si::joules, decltype(z)::unit);
 }
 
-void _C(void) {
+void test_division_with_base_conversion(void) {
     auto x = mpl::units::value<X, mpl::units::si::joules>{};
     auto y = mpl::units::value<Y, mpl::units::si::seconds>{};
     auto w = x / y;
@@ -459,7 +459,7 @@ void _C(void) {
     ASSERT_SAME(mpl::units::si::watts, decltype(w)::unit);
 }
 
-void _D(void) {
+void test_division_with_base_conversion_to_dimensionless(void) {
     auto x = mpl::units::value<X, mpl::units::si::joules>{};
     auto y = mpl::units::value<Y, mpl::units::si::joules>{};
     auto w = x / y;
@@ -467,7 +467,7 @@ void _D(void) {
     ASSERT_SAME(W, decltype(w));
 }
 
-void _E(void) {
+void test_division_with_equivalent_units(void) {
     auto x = mpl::units::value<int, mpl::units::si::joules>{};
     auto y = mpl::units::value<int, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
     auto z = x / y;
@@ -477,10 +477,10 @@ void _E(void) {
     ASSERT_SAME(std::false_type, a);
     ASSERT_SAME(mpl::true_type, b);
 
-    ASSERT_SAME(decltype(z), int);
+    ASSERT_SAME(int, decltype(z));
 }
 
-void _F(void) {
+void test_division_with_base_conversion_and_equivalent_units(void) {
     auto x = mpl::units::value<X, mpl::units::si::joules>{};
     auto y = mpl::units::value<Y, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
     auto w = x / y;
@@ -493,7 +493,7 @@ void _F(void) {
     ASSERT_SAME(W, decltype(w));
 }
 
-void _G(void) {
+void test_implicit_conversion_with_equivalent_units(void) {
     auto x = mpl::units::value<int, mpl::units::si::joules>{};
     auto y = mpl::units::value<int, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
     decltype(x) z = y;
@@ -506,7 +506,7 @@ void _G(void) {
     ASSERT_SAME(decltype(x), decltype(z));
 }
 
-} // namespace C
+} // namespace test_base_conversion
 } // namespace value
 
 } // anonymous namespace
