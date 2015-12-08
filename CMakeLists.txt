@@ -31,6 +31,10 @@ add_library(mpl_test STATIC
     src/test/logical.cpp
     src/test/set.cpp
     src/test/units.cpp
+
+    src/sample/units/physics.cpp
+    src/sample/units/physics.h
+    src/sample/units/types.h
 )
 
 target_link_libraries(mpl_test mpl)
