@@ -507,6 +507,174 @@ void test_implicit_conversion_with_equivalent_units(void) {
 }
 
 } // namespace test_base_conversion
+
+//------------------------------------------------------------------------------
+namespace relational {
+
+struct X {};
+struct Y {};
+struct Z {};
+struct W {};
+
+bool operator==(X const&, Y const&) { return true; }
+bool operator!=(X const&, Y const&) { return true; }
+bool operator< (X const&, Y const&) { return true; }
+bool operator<=(X const&, Y const&) { return true; }
+bool operator> (X const&, Y const&) { return true; }
+bool operator>=(X const&, Y const&) { return true; }
+
+X operator==(Z const&, W const&) { return X{}; }
+X operator!=(Z const&, W const&) { return X{}; }
+X operator< (Z const&, W const&) { return X{}; }
+X operator<=(Z const&, W const&) { return X{}; }
+X operator> (Z const&, W const&) { return X{}; }
+X operator>=(Z const&, W const&) { return X{}; }
+
+void test_same_units(void) {
+    auto x = mpl::units::value<int, mpl::units::si::meters>{};
+    auto y = mpl::units::value<int, mpl::units::si::meters>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::true_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
+void test_equivalent_units(void) {
+    auto x = mpl::units::value<int, mpl::units::si::joules>{};
+    auto y = mpl::units::value<int, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
+void test_base_types_with_same_units(void) {
+    auto x = mpl::units::value<X, mpl::units::si::meters>{};
+    auto y = mpl::units::value<Y, mpl::units::si::meters>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::true_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
+void test_base_types_with_equivalent_units(void) {
+    auto x = mpl::units::value<X, mpl::units::si::joules>{};
+    auto y = mpl::units::value<Y, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
+void test_return_types_with_same_units(void) {
+    auto x = mpl::units::value<Z, mpl::units::si::meters>{};
+    auto y = mpl::units::value<W, mpl::units::si::meters>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::true_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(X, decltype(eq));
+    ASSERT_SAME(X, decltype(ne));
+    ASSERT_SAME(X, decltype(lt));
+    ASSERT_SAME(X, decltype(le));
+    ASSERT_SAME(X, decltype(gt));
+    ASSERT_SAME(X, decltype(ge));
+}
+
+void test_return_types_with_equivalent_units(void) {
+    auto x = mpl::units::value<Z, mpl::units::si::joules>{};
+    auto y = mpl::units::value<W, mpl::units::product<mpl::units::si::meters, mpl::units::si::newtons>>{};
+
+    using a = std::is_same<decltype(x)::unit, decltype(y)::unit>::type;
+    using b = mpl::is_same<decltype(x)::unit, decltype(y)::unit>;
+    ASSERT_SAME(std::false_type, a);
+    ASSERT_SAME(mpl::true_type, b);
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(X, decltype(eq));
+    ASSERT_SAME(X, decltype(ne));
+    ASSERT_SAME(X, decltype(lt));
+    ASSERT_SAME(X, decltype(le));
+    ASSERT_SAME(X, decltype(gt));
+    ASSERT_SAME(X, decltype(ge));
+}
+
+} // namespace relational
 } // namespace value
 
 } // anonymous namespace

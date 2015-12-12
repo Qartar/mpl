@@ -374,6 +374,28 @@ class value {
     typename divide<_Tz, _Tw>::rtype operator/(value<_Tz, _Tw> const& a) const {
         return divide<_Tz, _Tw>::func(*this, a);
     }
+
+    //! Relational operator helper
+#define RELATIONAL(op)                                                          \
+    template<typename _Tz, typename _Tw>                                        \
+    decltype(_Tx() op _Tz()) operator op (value<_Tz, _Tw> const& a) const {     \
+        static_assert(is_same<_Ty, _Tw>::value, "Cannot compare values with different units.");\
+        return _value op (_Tz)a;                                                \
+    }
+
+    //! Equality
+    RELATIONAL(==);
+    //! Inequality
+    RELATIONAL(!=);
+    //! Less than
+    RELATIONAL(<);
+    //! Less than or equal to
+    RELATIONAL(<=);
+    //! Greater than
+    RELATIONAL(>);
+    //! Greater than or equal to
+    RELATIONAL(>=);
+#undef RELATIONAL
 };
 
 namespace si {
