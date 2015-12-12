@@ -1,6 +1,7 @@
 #include "mpl_test.h"
 
 #include <cstdint>
+#include <cmath>
 
 #include "mpl/units.h"
 #include "mpl/list.h"
@@ -718,6 +719,51 @@ void test_return_types_with_equivalent_units(void) {
 }
 
 } // namespace relational
+
+//------------------------------------------------------------------------------
+namespace root {
+
+void test_square_root(void) {
+    auto a = mpl::units::value<float, mpl::units::si::sieverts>{};
+    auto b = mpl::units::value<float, mpl::units::product<mpl::units::si::kilograms, mpl::units::si::joules>>{};
+    auto c = mpl::units::value<float, mpl::units::power<mpl::units::si::meters, 2>>{};
+    auto d = mpl::units::value<float, mpl::units::power<mpl::units::si::teslas, 2>>{};
+    auto e = mpl::units::value<float, mpl::units::si::radians>{};
+
+    auto a_ = std::sqrt(a);
+    auto b_ = std::sqrt(b);
+    auto c_ = std::sqrt(c);
+    auto d_ = std::sqrt(d);
+    auto e_ = std::sqrt(e);
+
+    ASSERT_SAME(decltype(a), decltype(a_ * a_));
+    ASSERT_SAME(decltype(b), decltype(b_ * b_));
+    ASSERT_SAME(decltype(c), decltype(c_ * c_));
+    ASSERT_SAME(decltype(d), decltype(d_ * d_));
+    ASSERT_SAME(decltype(e), decltype(e_ * e_));
+}
+
+void test_cube_root(void) {
+    auto a = mpl::units::value<float, mpl::units::product<mpl::units::si::pascals,
+                                                          mpl::units::si::joules,
+                                                          mpl::units::si::watts,
+                                                          mpl::units::si::seconds>>{};
+    auto b = mpl::units::value<float, mpl::units::power<mpl::units::si::meters, 3>>{};
+    auto c = mpl::units::value<float, mpl::units::power<mpl::units::si::teslas, 3>>{};
+    auto d = mpl::units::value<float, mpl::units::si::radians>{};
+
+    auto a_ = std::cbrt(a);
+    auto b_ = std::cbrt(b);
+    auto c_ = std::cbrt(c);
+    auto d_ = std::cbrt(d);
+
+    ASSERT_SAME(decltype(a), decltype(a_ * a_ * a_));
+    ASSERT_SAME(decltype(b), decltype(b_ * b_ * b_));
+    ASSERT_SAME(decltype(c), decltype(c_ * c_ * c_));
+    ASSERT_SAME(decltype(d), decltype(d_ * d_ * d_));
+}
+
+} // namespace root
 } // namespace value
 
 } // anonymous namespace

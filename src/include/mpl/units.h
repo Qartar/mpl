@@ -254,6 +254,12 @@ template<typename _Tx, int _Ny> struct fn_power {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `root` metafunction
+template<typename _Tx, int _Ny> struct fn_root {
+    using type = map<typename fn_lower<_Ny>::func, _Tx>;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 //! Divide operation delegate. C++ does not allow explicit specialization of
 //! template functions, this is a workaround for that limitation.
 template<typename _Tx, typename _Ty, typename _Tz, typename _Tw, typename = void> struct divide;
@@ -562,5 +568,21 @@ struct fn_is_same<_Tx, _Ty, enable_if<units::is_unit<_Tx>::value && units::is_un
 } // namespace detail
 
 } // namespace mpl
+
+namespace std {
+
+template<typename _Tx, typename _Ty>
+mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type> sqrt(mpl::units::value<_Tx, _Ty> const& a) {
+    static_assert(mpl::units::is_square<_Ty>::value, "Cannot take the square root of this unit.");
+    return mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type>(sqrt((_Tx)a));
+}
+
+template<typename _Tx, typename _Ty>
+mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type> cbrt(mpl::units::value<_Tx, _Ty> const& a) {
+    static_assert(mpl::units::is_cube<_Ty>::value, "Cannot take the cube root of this unit.");
+    return mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type>(cbrt((_Tx)a));
+}
+
+} // namespace std
 
 #endif _mpl_units_h_
