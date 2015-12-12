@@ -253,6 +253,49 @@ ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::newtons>);
 } // namespace is_unit
 
 ////////////////////////////////////////////////////////////////////////////////
+namespace is_square {
+
+using _A = mpl::units::si::meters;
+using _B = mpl::units::si::sieverts;
+using _C = mpl::units::product<mpl::units::si::kilograms, mpl::units::si::joules>;
+using _D = mpl::units::power<mpl::units::si::meters, 2>;
+using _E = mpl::units::power<mpl::units::si::teslas, 2>;
+using _F = mpl::units::si::radians;
+
+ASSERT_SAME(mpl::false_type, mpl::units::is_square<int>);
+ASSERT_SAME(mpl::false_type, mpl::units::is_square<_A>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_square<_B>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_square<_C>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_square<_D>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_square<_E>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_square<_F>);
+
+} // namespace is_square
+
+////////////////////////////////////////////////////////////////////////////////
+namespace is_cube {
+
+using _A = mpl::units::si::meters;
+using _B = mpl::units::si::sieverts;
+using _C = mpl::units::product<mpl::units::si::pascals,
+                               mpl::units::si::joules,
+                               mpl::units::si::watts,
+                               mpl::units::si::seconds>;
+using _D = mpl::units::power<mpl::units::si::meters, 3>;
+using _E = mpl::units::power<mpl::units::si::teslas, 3>;
+using _F = mpl::units::si::radians;
+
+ASSERT_SAME(mpl::false_type, mpl::units::is_cube<int>);
+ASSERT_SAME(mpl::false_type, mpl::units::is_cube<_A>);
+ASSERT_SAME(mpl::false_type, mpl::units::is_cube<_B>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_cube<_C>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_cube<_D>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_cube<_E>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_cube<_F>);
+
+} // namespace is_cube
+
+////////////////////////////////////////////////////////////////////////////////
 namespace value {
 
 //------------------------------------------------------------------------------

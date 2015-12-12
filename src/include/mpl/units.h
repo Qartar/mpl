@@ -48,6 +48,73 @@ template<int _Nx> struct fn_raise {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Helper metafunction for determining whether a base unit can be taken to the
+//! Nth root.
+template<int _Nx> struct fn_can_lower {
+    //template<typename _Ty> struct _func {
+    //    using type = false_type;
+    //};
+
+    //template<typename _Tbase, int _Npower>
+    //struct _func<unitbase<_Tbase, _Npower>> {
+    //    using type = true_type;
+    //};
+
+    template<typename _Ty, typename = void> struct _func {
+        using type = false_type;
+    };
+
+    template<typename _Tbase, int _Npower>
+    struct _func<unitbase<_Tbase, _Npower>, enable_if<_Npower % _Nx == 0>> {
+        using type = true_type;
+    };
+
+    template<typename _Ty> using func = typename _func<_Ty>::type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//! Helper metafunction for taking the Nth root of a base unit.
+template<int _Nx> struct fn_lower {
+    template<typename _Ty> struct _func;
+
+    template<typename _Tbase, int _Npower>
+    struct _func<unitbase<_Tbase, _Npower>> {
+        using type = unitbase<_Tbase, _Npower / _Nx>;
+    };
+
+    template<typename _Ty> using func = typename _func<_Ty>::type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//! Helper metafunction for determining whether a unit can be taken to the Nth
+//! root.
+template<int _Nx, typename _Ty> struct fn_can_lower_unit {
+    using type = false_type;
+};
+
+template<int _Nx, typename _Ty, typename _Tz>
+struct fn_can_lower_unit<_Nx, cons<_Ty, _Tz>> {
+    using lower = typename fn_lower<_Nx>::func<_Ty>;
+    using raise = typename fn_raise<_Nx>::func<lower>;
+
+    using type = and<mpl::is_same<raise, _Ty>,
+                     typename fn_can_lower_unit<_Nx, _Tz>::type>;
+};
+
+template<int _Nx>
+struct fn_can_lower_unit<_Nx, nil> {
+    using type = true_type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `is_square` metafunction
+template<typename _Tx> using fn_is_square = fn_can_lower_unit<2, _Tx>;
+
+////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `is_cube` metafunction
+template<typename _Tx> using fn_is_cube = fn_can_lower_unit<3, _Tx>;
+
+////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `is_same_base` metafunction
 template<typename _Tx, typename _Ty> struct fn_is_same_base {
     using type = false_type;
@@ -243,6 +310,24 @@ template<typename _Tx, typename _Ty> using is_same = typename detail::fn_is_same
  * Metafunction for determining whether a type is a unit type.
  */
 template<typename _Tx> using is_unit = typename detail::fn_is_unit<_Tx>::type;
+
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * is_square
+ *
+ * Metafunction for determining whether a unit type is a square, i.e. all base
+ * units have a power divisible by two.
+ */
+template<typename _Tx> using is_square = typename detail::fn_is_square<_Tx>::type;
+
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * is_cube
+ *
+ * Metafunction for determining whether a unit type is a cube, i.e. all base
+ * units have a power divisible by three.
+ */
+template<typename _Tx> using is_cube = typename detail::fn_is_cube<_Tx>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
