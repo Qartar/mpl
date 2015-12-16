@@ -30,4 +30,9 @@ template<typename T> constexpr joules_per_kelvin<T> k_b() {
     return joules_per_kelvin<T>((T)1.3806485279e-23);
 }
 
+//! Ideal gas constant
+template<typename T> constexpr joules_per_mole_kelvin<T> R() {
+    return joules_per_mole_kelvin<T>((T)8.3144598f);
+}
+
 } // namespace samples

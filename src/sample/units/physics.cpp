@@ -157,4 +157,100 @@ meters_per_second_squared<float> exercise_2(kilograms<float> m_a,
 
 } // namespace kinematics
 
+namespace {
+
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * Exercise 1
+ *
+ * A well-insulated container of volume V contains a volume V_l of liquid
+ * nitrogen in thermal equilibrium with the remainder filled with nitrogen gas 
+ * at a pressure of 1 atmosphere. An iron object at room temperature with mass
+ * m_Fe is dropped into the container and the container is sealed tightly. What
+ * is the pressure in the container after it returns to thermal equilibrium?
+ */
+pascals<float> exercise_1(meters_cubed<float> V,
+                          meters_cubed<float> V_l,
+                          kilograms<float> m_Fe) {
+    //
+    // Constants
+    //
+
+    //! Boiling point of nitrogen at 1 atmosphere
+    static const auto T_N = kelvin<float>(77.0f);
+    //! Room temperature
+    static const auto T_r = kelvin<float>(293.0f);
+
+    //! Density of liquid nitrogen
+    static const auto rho_N = kilograms_per_meter_cubed<float>(810.0f);
+    //! Density of metallic iron
+    static const auto rho_Fe = kilograms_per_meter_cubed<float>(7870.0f);
+
+    //! Specific heat capacity of nitrogen gas
+    static const auto C_N = joules_per_mole_kelvin<float>(2.08f);
+    //! Specific heat capacity of metallic iron
+    static const auto C_Fe = joules_per_kilogram_kelvin<float>(449.0f);
+
+    //! Heap of vaporization of nitrogen
+    static const auto H_N = joules_per_kilogram<float>(1.99e5f);
+
+    //! Molar mass of nitrogen gas
+    static const auto M_N = kilograms_per_mole<float>(2.80134e-2f);
+
+    //
+    // Derivation
+    //
+
+    //! Energy of vaporization required to boil all of the liquid nitrogen
+    auto L = V_l * rho_N * H_N;
+    //! Thermal energy of the iron object
+    auto E = m_Fe * C_Fe * (T_r - T_N);
+
+    // Not all of the nitrogen boils.
+    if (E < L) {
+
+        //! Final equilibrium temperature, same as initial temperature.
+        auto T_f = T_N;
+        //! Mass of boiled nitrogen
+        auto m_N = E / H_N;
+        //! Quantity of boiled nitrogen
+        auto mol_Nb = m_N / M_N;
+        //! Initial quantity of nitrogen gas (using PV = nRT)
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float>() * T_r);
+        //! Final volume of liquid nitrogen
+        auto V_f = V_l * (1.0f - E / L);
+        //! Volume of the iron object
+        auto V_Fe = m_Fe / rho_Fe;
+        //! Final volume of nitrogen gas
+        auto V_gas = V - V_f - V_Fe;
+
+        //! Final pressure in the container
+        return ((mol_N0 + mol_Nb) * R<float>() * T_f) / V_gas;
+    }
+    // All of the nitrogen boils.
+    else {
+
+        //! Mass of boiled nitrogen
+        auto m_N = V_l * rho_N;
+        //! Quantity of boiled nitrogen
+        auto mol_Nb = m_N / M_N;
+        //! Initial quantity of nitrogen gas (using PV = nRT)
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float>() * T_r);
+        //! Volume of the iron object
+        auto V_Fe = m_Fe / rho_Fe;
+        //! Final volume of nitrogen gas
+        auto V_gas = V - V_Fe;
+
+        //! Thermal capacity of the system
+        auto C = (mol_Nb + mol_N0) * C_N + m_Fe * C_Fe;
+        //! Final equilibrium temperature.
+        auto T_f = T_r + (E - L) / C;
+
+        //! Final pressure in the container
+        return ((mol_N0 + mol_Nb) * R<float>() * T_f) / V_gas;
+    }
+}
+
+} // namespace
+
 } // namespace samples
