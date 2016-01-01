@@ -489,6 +489,35 @@ class value {
 #undef RELATIONAL
 };
 
+namespace detail {
+
+////////////////////////////////////////////////////////////////////////////////
+//! Specializations for divide operation delegates. C++ does not allow explicit
+//! specialization of template functions. These specializations need to be
+//! defined after the definition of the value type.
+
+//! Division by unit type
+template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
+struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<!is_same<_Ty, _Tw>::value>> {
+    using rtype = value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>>;
+
+    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
+        return rtype((_Tx)lhs / (_Tz)rhs);
+    }
+};
+
+//! Division by same type
+template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
+struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<is_same<_Ty, _Tw>::value>> {
+    using rtype = decltype(_Tx() / _Tz());
+
+    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
+        return (_Tx)lhs / (_Tz)rhs;
+    }
+};
+
+} // namespace detail
+
 namespace si {
 
 // SI base units
@@ -524,35 +553,6 @@ using sieverts = quotient<joules, kilograms>;
 using katals = quotient<moles, seconds>;
 
 } // namespace si
-
-namespace detail {
-
-////////////////////////////////////////////////////////////////////////////////
-//! Specializations for divide operation delegates. C++ does not allow explicit
-//! specialization of template functions. These specializations need to be
-//! defined after the definition of the value type.
-
-//! Division by unit type
-template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
-struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<!is_same<_Ty, _Tw>::value>> {
-    using rtype = value<decltype(_Tx() / _Tz()), quotient<_Ty, _Tw>>;
-
-    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
-        return rtype((_Tx)lhs / (_Tz)rhs);
-    }
-};
-
-//! Division by same type
-template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
-struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<is_same<_Ty, _Tw>::value>> {
-    using rtype = decltype(_Tx() / _Tz());
-
-    static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
-        return (_Tx)lhs / (_Tz)rhs;
-    }
-};
-
-} // namespace detail
 
 } // namespace units
 
