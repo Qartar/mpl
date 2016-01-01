@@ -571,12 +571,16 @@ struct fn_is_same<_Tx, _Ty, enable_if<units::is_unit<_Tx>::value && units::is_un
 
 namespace std {
 
+////////////////////////////////////////////////////////////////////////////////
+//! Specialization for `std::sqrt`
 template<typename _Tx, typename _Ty>
 mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type> sqrt(mpl::units::value<_Tx, _Ty> const& a) {
     static_assert(mpl::units::is_square<_Ty>::value, "Cannot take the square root of this unit.");
     return mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type>(sqrt((_Tx)a));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//! Specialization for `std::cbrt`
 template<typename _Tx, typename _Ty>
 mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type> cbrt(mpl::units::value<_Tx, _Ty> const& a) {
     static_assert(mpl::units::is_cube<_Ty>::value, "Cannot take the cube root of this unit.");
