@@ -381,17 +381,17 @@ class value {
     }
 
     //! Addition by unit type
-    template<typename _Tz>
-    value<type, unit> operator+(value<type, _Tz> const& a) const {
-        static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
-        return value<type, unit>(_value + a._value);
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() + _Tz()), _Ty> operator+(value<_Tz, _Tw> const& a) const {
+        static_assert(is_same<_Ty, _Tw>::value, "Cannot add values with different units.");
+        return value<decltype(_Tx() + _Tz()), _Ty>(_value + (_Tz)a);
     }
 
     //! Subtraction by unit type
-    template<typename _Tz>
-    value<type, unit> operator-(value<type, _Tz> const& a) const {
-        static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
-        return value<type, unit>(_value - a._value);
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() - _Tz()), _Ty> operator-(value<_Tz, _Tw> const& a) const {
+        static_assert(is_same<_Ty, _Tw>::value, "Cannot subtract values with different units.");
+        return value<decltype(_Tx() - _Tz()), _Ty>(_value - (_Tz)a);
     }
 
     //! Multiplication by scalar
@@ -419,18 +419,18 @@ class value {
     }
 
     //! Addition by unit type
-    template<typename _Tz>
-    value<type, unit>& operator+=(value<type, _Tz> const& a) {
-        static_assert(is_same<unit, _Tz>::value, "Cannot add values with different units.");
-        _value += a._value;
+    template<typename _Tz, typename _Tw>
+    value<_Tx, _Ty>& operator+=(value<_Tz, _Tw> const& a) {
+        static_assert(is_same<_Ty, _Tw>::value, "Cannot add values with different units.");
+        _value += (_Tz)a;
         return *this;
     }
 
     //! Subtraction by unit type
-    template<typename _Tz>
-    value<type, unit>& operator-=(value<type, _Tz> const& a) {
-        static_assert(is_same<unit, _Tz>::value, "Cannot subtract values with different units.");
-        _value -= a._value;
+    template<typename _Tz, typename _Tw>
+    value<_Tx, _Ty>& operator-=(value<_Tz, _Tw> const& a) {
+        static_assert(is_same<_Ty, _Tw>::value, "Cannot subtract values with different units.");
+        _value -= (_Tz)a;
         return *this;
     }
 

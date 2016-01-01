@@ -419,6 +419,48 @@ void test_implicit_promotion_division(void) {
     ASSERT_SAME(int64_t, decltype(h)::type);
 }
 
+void test_implicit_promotion_addition(void) {
+    auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
+    auto b = mpl::units::value<double, mpl::units::si::meters>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::units::si::meters>(1);
+    auto d = mpl::units::value<int64_t, mpl::units::si::meters>(1ll);
+
+    auto e = a + b;
+    auto f = b + c;
+    auto g = c + d;
+
+    ASSERT_SAME(double, decltype(e)::type);
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(int64_t, decltype(g)::type);
+
+    auto h = b += a;
+    auto i = d += c;
+
+    ASSERT_SAME(double, decltype(h)::type);
+    ASSERT_SAME(int64_t, decltype(i)::type);
+}
+
+void test_implicit_promotion_subtraction(void) {
+    auto a = mpl::units::value<float, mpl::units::si::meters>(1.0f);
+    auto b = mpl::units::value<double, mpl::units::si::meters>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::units::si::meters>(1);
+    auto d = mpl::units::value<int64_t, mpl::units::si::meters>(1ll);
+
+    auto e = a - b;
+    auto f = b - c;
+    auto g = c - d;
+
+    ASSERT_SAME(double, decltype(e)::type);
+    ASSERT_SAME(double, decltype(f)::type);
+    ASSERT_SAME(int64_t, decltype(g)::type);
+
+    auto h = b -= a;
+    auto i = d -= c;
+
+    ASSERT_SAME(double, decltype(h)::type);
+    ASSERT_SAME(int64_t, decltype(i)::type);
+}
+
 } // namespace test_no_conversion
 
 //------------------------------------------------------------------------------
