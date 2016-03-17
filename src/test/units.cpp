@@ -461,6 +461,60 @@ void test_implicit_promotion_subtraction(void) {
     ASSERT_SAME(int64_t, decltype(i)::type);
 }
 
+void test_implicit_scalar_addition(void) {
+    auto a = mpl::units::value<float, mpl::nil>(1.0f);
+    auto b = mpl::units::value<double, mpl::nil>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::nil>(1);
+    auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
+
+    auto e = 1.0f + a;
+    auto f = 1.0 + b;
+    auto g = 1 + c;
+    auto h = 1ll + d;
+
+    ASSERT_SAME(float, decltype(e));
+    ASSERT_SAME(double, decltype(f));
+    ASSERT_SAME(int32_t, decltype(g));
+    ASSERT_SAME(int64_t, decltype(h));
+
+    auto i = e += a;
+    auto j = f += b;
+    auto k = g += c;
+    auto l = h += d;
+
+    ASSERT_SAME(float, decltype(i));
+    ASSERT_SAME(double, decltype(j));
+    ASSERT_SAME(int32_t, decltype(k));
+    ASSERT_SAME(int64_t, decltype(l));
+}
+
+void test_implicit_scalar_subtraction(void) {
+    auto a = mpl::units::value<float, mpl::nil>(1.0f);
+    auto b = mpl::units::value<double, mpl::nil>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::nil>(1);
+    auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
+
+    auto e = 1.0f - a;
+    auto f = 1.0 - b;
+    auto g = 1 - c;
+    auto h = 1ll - d;
+
+    ASSERT_SAME(float, decltype(e));
+    ASSERT_SAME(double, decltype(f));
+    ASSERT_SAME(int32_t, decltype(g));
+    ASSERT_SAME(int64_t, decltype(h));
+
+    auto i = e -= a;
+    auto j = f -= b;
+    auto k = g -= c;
+    auto l = h -= d;
+
+    ASSERT_SAME(float, decltype(i));
+    ASSERT_SAME(double, decltype(j));
+    ASSERT_SAME(int32_t, decltype(k));
+    ASSERT_SAME(int64_t, decltype(l));
+}
+
 } // namespace test_no_conversion
 
 //------------------------------------------------------------------------------

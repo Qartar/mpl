@@ -394,6 +394,20 @@ class value {
         return value<decltype(_Tx() - _Tz()), _Ty>(_value - (_Tz)a);
     }
 
+    //! Addition of scalar
+    template<typename _Tz>
+    friend decltype(_Tz() + _Tx()) operator+(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
+        return lhs + (_Tx)rhs;
+    }
+
+    //! Subtraction of scalar
+    template<typename _Tz>
+    friend decltype(_Tz() - _Tx()) operator-(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
+        return lhs - (_Tx)rhs;
+    }
+
     //! Multiplication by scalar
     template<typename _Tz>
     value<decltype(_Tx() * _Tz()), unit> operator*(_Tz const& s) const {
@@ -432,6 +446,20 @@ class value {
         static_assert(is_same<_Ty, _Tw>::value, "Cannot subtract values with different units.");
         _value -= (_Tz)a;
         return *this;
+    }
+
+    //! Addition of scalar
+    template<typename _Tz>
+    friend _Tz& operator+=(_Tz& lhs, value<type, unit> const& rhs) {
+        static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
+        return lhs += (_Tx)rhs;
+    }
+
+    //! Subtraction of scalar
+    template<typename _Tz>
+    friend _Tz& operator-=(_Tz& lhs, value<type, unit> const& rhs) {
+        static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
+        return lhs -= (_Tx)rhs;
     }
 
     //! Multiplication by scalar
