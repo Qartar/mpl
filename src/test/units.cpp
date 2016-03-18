@@ -254,6 +254,21 @@ ASSERT_SAME(mpl::true_type, is_unit<mpl::units::si::newtons>);
 } // namespace is_unit
 
 ////////////////////////////////////////////////////////////////////////////////
+namespace is_dimensionless {
+
+using _A = mpl::units::si::meters;
+using _B = mpl::units::si::sieverts;
+using _C = mpl::units::product<mpl::units::si::seconds, mpl::units::si::hertz>;
+using _D = mpl::units::si::radians;
+
+ASSERT_SAME(mpl::false_type, mpl::units::is_dimensionless<_A>);
+ASSERT_SAME(mpl::false_type, mpl::units::is_dimensionless<_B>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_dimensionless<_C>);
+ASSERT_SAME(mpl::true_type, mpl::units::is_dimensionless<_D>);
+
+} // namespace is_dimensionless
+
+////////////////////////////////////////////////////////////////////////////////
 namespace is_square {
 
 using _A = mpl::units::si::meters;
@@ -459,6 +474,18 @@ void test_implicit_promotion_subtraction(void) {
 
     ASSERT_SAME(double, decltype(h)::type);
     ASSERT_SAME(int64_t, decltype(i)::type);
+}
+
+void test_implicit_scalar_cast(void) {
+    auto a = mpl::units::value<float, mpl::nil>(1.0f);
+    auto b = mpl::units::value<double, mpl::nil>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::nil>(1);
+    auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
+
+    float   e = a;
+    double  f = b;
+    int32_t g = c;
+    int64_t h = d;
 }
 
 void test_implicit_scalar_addition(void) {

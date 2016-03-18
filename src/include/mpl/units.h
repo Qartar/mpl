@@ -181,6 +181,16 @@ template<> struct fn_is_unit<nil> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Implementation of `is_dimensionless` metafunction
+template<typename _Tx> struct fn_is_dimensionless {
+    using type = false_type;
+};
+
+template<> struct fn_is_dimensionless<nil> {
+    using type = true_type;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 //! Append a unitbase type onto a unit type and combine appropriately.
 template<typename _Tx, typename _Ty, typename = void> struct fn_append {
     using type = cons<car<_Tx>, typename fn_append<cdr<_Tx>, _Ty>::type>;
@@ -319,6 +329,14 @@ template<typename _Tx> using is_unit = typename detail::fn_is_unit<_Tx>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
+ * is_dimensionless
+ *
+ * Metafunction for determining whether a unit type is dimensionless.
+ */
+template<typename _Tx> using is_dimensionless = typename detail::fn_is_dimensionless<_Tx>::type;
+
+////////////////////////////////////////////////////////////////////////////////
+/**
  * is_square
  *
  * Metafunction for determining whether a unit type is a square, i.e. all base
@@ -368,8 +386,15 @@ class value {
     explicit value(type const& v)
         : _value(v) {}
 
+    //! Implicit cast to type
+    template<typename _Tw = _Ty>
+    operator typename enable_if<is_dimensionless<_Tw>::value, _Tx>() const {
+        return _value;
+    }
+
     //! Explicit cast to type
-    explicit operator type() const {
+    template<typename _Tw = _Ty>
+    explicit operator typename enable_if<!is_dimensionless<_Tw>::value, _Tx>() const {
         return _value;
     }
 
