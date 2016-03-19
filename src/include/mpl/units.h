@@ -519,6 +519,20 @@ class value {
         return divide<_Tz, _Tw>::func(*this, a);
     }
 
+    //! Bitwise XOR operator by unit type
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() ^ _Tz()), product<_Ty, _Tw>> operator^(value<_Tz, _Tw> const& a) const {
+        static_assert(!std::is_integral<_Tx>::value, "Cannot use Bitwise XOR operator on integral types with different units.");
+        return value<decltype(_Tx() ^ _Tz()), product<unit, _Tw>>(_value ^ (_Tz)a);
+    }
+
+    //! Remainder operator by unit type
+    template<typename _Tz, typename _Tw>
+    value<decltype(_Tx() % _Tz()), product<_Ty, _Tw>> operator%(value<_Tz, _Tw> const& a) const {
+        static_assert(!std::is_integral<_Tx>::value, "Cannot use remainder operator on integral types with different units.");
+        return value<decltype(_Tx() % _Tz()), product<unit, _Tw>>(_value % (_Tz)a);
+    }
+
     //! Relational operator helper
 #define RELATIONAL(op)                                                          \
     template<typename _Tz, typename _Tw>                                        \
