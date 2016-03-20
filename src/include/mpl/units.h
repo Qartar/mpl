@@ -1,6 +1,8 @@
 #ifndef _mpl_units_h_
 #define _mpl_units_h_
 
+#include <utility>
+
 #include "mpl/functional.h"
 #include "mpl/logical.h"
 #include "mpl/set.h"
@@ -385,6 +387,11 @@ class value {
     //! Explicit construction from type
     explicit value(type const& v)
         : _value(v) {}
+
+    //! Explicit construction from arguments
+    template<typename... _Args>
+    explicit value(_Args&&... args)
+        : _value(std::forward<_Args>(args)...) {}
 
     //! Implicit cast to type
     template<typename _Tw = _Ty>
