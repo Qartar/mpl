@@ -96,8 +96,8 @@ template<int _Nx, typename _Ty> struct fn_can_lower_unit {
 
 template<int _Nx, typename _Ty, typename _Tz>
 struct fn_can_lower_unit<_Nx, cons<_Ty, _Tz>> {
-    using lower = typename fn_lower<_Nx>::func<_Ty>;
-    using raise = typename fn_raise<_Nx>::func<lower>;
+    using lower = typename fn_lower<_Nx>::template func<_Ty>;
+    using raise = typename fn_raise<_Nx>::template func<lower>;
 
     using type = and<mpl::is_same<raise, _Ty>,
                      typename fn_can_lower_unit<_Nx, _Tz>::type>;
@@ -201,7 +201,7 @@ template<typename _Tx, typename _Ty, typename = void> struct fn_append {
 //! Append _Ty if there are no units in the list with the same base unit.
 template<typename _Tx, typename _Ty>
 struct fn_append < _Tx, _Ty, enable_if < !contains<_Tx, _Ty, is_same_base>::value >> {
-    using type = typename append<_Tx, _Ty>;
+    using type = append<_Tx, _Ty>;
 };
 
 //! If _Ty has the same base unit as the next element in the unit list then
@@ -262,13 +262,17 @@ template<typename... _Targs> struct fn_product {
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `power` metafunction
 template<typename _Tx, int _Ny> struct fn_power {
-    using type = map<typename fn_raise<_Ny>::func, _Tx>;
+    template<typename _Tz>
+    using func = typename fn_raise<_Ny>::template func<_Tz>;
+    using type = map<func, _Tx>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 //! Implementation of `root` metafunction
 template<typename _Tx, int _Ny> struct fn_root {
-    using type = map<typename fn_lower<_Ny>::func, _Tx>;
+    template<typename _Tz>
+    using func = typename fn_lower<_Ny>::template func<_Tz>;
+    using type = map<func, _Tx>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -395,13 +399,13 @@ class value {
 
     //! Implicit cast to type
     template<typename _Tw = _Ty>
-    operator typename enable_if<is_dimensionless<_Tw>::value, _Tx>() const {
+    operator enable_if<is_dimensionless<_Tw>::value, _Tx> () const {
         return _value;
     }
 
     //! Explicit cast to type
     template<typename _Tw = _Ty>
-    explicit operator typename enable_if<!is_dimensionless<_Tw>::value, _Tx>() const {
+    explicit operator enable_if<!is_dimensionless<_Tw>::value, _Tx> () const {
         return _value;
     }
 
@@ -429,6 +433,7 @@ class value {
     //! Addition of scalar
     template<typename _Tz>
     friend decltype(_Tz() + _Tx()) operator+(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for addition of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
         return lhs + (_Tx)rhs;
     }
@@ -436,6 +441,7 @@ class value {
     //! Subtraction of scalar
     template<typename _Tz>
     friend decltype(_Tz() - _Tx()) operator-(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for subtraction of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
         return lhs - (_Tx)rhs;
     }
@@ -443,25 +449,29 @@ class value {
     //! Multiplication by scalar
     template<typename _Tz>
     value<decltype(_Tx() * _Tz()), unit> operator*(_Tz const& s) const {
+        static_assert(!is_unit<_Tz>::value, "This method is for multiplication by scalar types only.");
         return value<decltype(_Tx() * _Tz()), unit>(_value * s);
     }
 
     //! Division by scalar
     template<typename _Tz>
-    value<decltype(_Tx() * _Tz()), unit> operator/(_Tz const& s) const {
-        return value<decltype(_Tx() * _Tz()), unit>(_value / s);
+    value<decltype(_Tx() / _Tz()), unit> operator/(_Tz const& s) const {
+        static_assert(!is_unit<_Tz>::value, "This method is for division by scalar types only.");
+        return value<decltype(_Tx() / _Tz()), unit>(_value / s);
     }
 
     //! Multiplication of scalar
     template<typename _Tz>
-    friend value<decltype(_Tx() / _Tz()), unit> operator*(_Tz const& lhs, value<type, unit> const& rhs) {
-        return value<decltype(_Tx() / _Tz()), unit>(lhs * rhs._value);
+    friend value<decltype(_Tz() * _Tx()), unit> operator*(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for multiplication of scalar types only.");
+        return value<decltype(_Tz() * _Tx()), unit>(lhs * rhs._value);
     }
 
     //! Division of scalar
     template<typename _Tz>
-    friend value<decltype(_Tx() / _Tz()), reciprocal<unit>> operator/(_Tz const& lhs, value<type, unit> const& rhs) {
-        return value<decltype(_Tx() / _Tz()), reciprocal<unit>>(lhs / rhs._value);
+    friend value<decltype(_Tz() / _Tx()), reciprocal<unit>> operator/(_Tz const& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for division of scalar types only.");
+        return value<decltype(_Tz() / _Tx()), reciprocal<unit>>(lhs / rhs._value);
     }
 
     //! Addition by unit type
@@ -483,6 +493,7 @@ class value {
     //! Addition of scalar
     template<typename _Tz>
     friend _Tz& operator+=(_Tz& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for addition of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
         return lhs += (_Tx)rhs;
     }
@@ -490,6 +501,7 @@ class value {
     //! Subtraction of scalar
     template<typename _Tz>
     friend _Tz& operator-=(_Tz& lhs, value<type, unit> const& rhs) {
+        static_assert(!is_unit<_Tz>::value, "This method is for subtraction of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
         return lhs -= (_Tx)rhs;
     }
@@ -514,7 +526,7 @@ class value {
     //! Multiplication by unit type
     template<typename _Tz, typename _Tw>
     value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>> operator*(value<_Tz, _Tw> const& a) const {
-        return value<decltype(_Tx() * _Tz()), product<unit, _Tw>>(_value * (_Tz)a);
+        return value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>>(_value * (_Tz)a);
     }
 
     //! Division by unit type and same type via detail::divide delegate.
@@ -663,4 +675,4 @@ mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type> cbrt(
 
 } // namespace std
 
-#endif _mpl_units_h_
+#endif //_mpl_units_h_

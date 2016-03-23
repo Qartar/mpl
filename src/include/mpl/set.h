@@ -44,7 +44,7 @@ struct fn_contains<nil, _Tx, _Tcmp, void> {
     using type = false_type;
 };
 
-template<typename _Tx, typename _Ty, template<typename, typename> class _Tcmp = is_same>
+template<typename _Tx, typename _Ty, template<typename, typename> class _Tcmp>
 using fn_contains_t = typename fn_contains<_Tx, _Ty, _Tcmp>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,4 +167,4 @@ template<typename... _Targs> using meet = typename detail::fn_meet<is_same, _Tar
 
 } // namespace mpl
 
-#endif _mpl_set_h_
+#endif //_mpl_set_h_

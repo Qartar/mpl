@@ -86,4 +86,4 @@ template<template<typename, typename> class _Top, typename _Tlist> using reduce 
 
 } // namespace mpl
 
-#endif _mpl_functional_h_
+#endif //_mpl_functional_h_

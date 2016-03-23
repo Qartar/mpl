@@ -23,3 +23,10 @@ target_include_directories(mpl
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+    target_compile_options(mpl
+        PUBLIC
+            -fno-operator-names
+    )
+endif()
