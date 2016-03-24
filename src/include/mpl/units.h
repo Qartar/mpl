@@ -658,6 +658,13 @@ struct fn_is_same<_Tx, _Ty, enable_if<units::is_unit<_Tx>::value && units::is_un
 namespace std {
 
 ////////////////////////////////////////////////////////////////////////////////
+//! Specialization for `std::abs`
+template<typename _Tx, typename _Ty>
+mpl::units::value<_Tx, _Ty> abs(mpl::units::value<_Tx, _Ty> const& a) {
+    return mpl::units::value<_Tx, _Ty>(abs((_Tx)a));
+}
+
+////////////////////////////////////////////////////////////////////////////////
 //! Specialization for `std::sqrt`
 template<typename _Tx, typename _Ty>
 mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type> sqrt(mpl::units::value<_Tx, _Ty> const& a) {
