@@ -853,11 +853,11 @@ void test_square_root(void) {
     auto d = mpl::units::value<float, mpl::units::power<mpl::units::si::teslas, 2>>{};
     auto e = mpl::units::value<float, mpl::units::si::radians>{};
 
-    auto a_ = std::sqrt(a);
-    auto b_ = std::sqrt(b);
-    auto c_ = std::sqrt(c);
-    auto d_ = std::sqrt(d);
-    auto e_ = std::sqrt(e);
+    auto a_ = sqrt(a);
+    auto b_ = sqrt(b);
+    auto c_ = sqrt(c);
+    auto d_ = sqrt(d);
+    auto e_ = sqrt(e);
 
     ASSERT_SAME(decltype(a), decltype(a_ * a_));
     ASSERT_SAME(decltype(b), decltype(b_ * b_));
@@ -875,10 +875,10 @@ void test_cube_root(void) {
     auto c = mpl::units::value<float, mpl::units::power<mpl::units::si::teslas, 3>>{};
     auto d = mpl::units::value<float, mpl::units::si::radians>{};
 
-    auto a_ = std::cbrt(a);
-    auto b_ = std::cbrt(b);
-    auto c_ = std::cbrt(c);
-    auto d_ = std::cbrt(d);
+    auto a_ = cbrt(a);
+    auto b_ = cbrt(b);
+    auto c_ = cbrt(c);
+    auto d_ = cbrt(d);
 
     ASSERT_SAME(decltype(a), decltype(a_ * a_ * a_));
     ASSERT_SAME(decltype(b), decltype(b_ * b_ * b_));

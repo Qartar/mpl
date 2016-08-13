@@ -609,6 +609,29 @@ class value {
     //! Greater than or equal to
     RELATIONAL(>=);
 #undef RELATIONAL
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //! Absolute value
+    friend value<_Tx, _Ty> abs(value const& a) {
+        using std::abs;
+        return value(abs(a._value));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //! Square root
+    friend value<_Tx, typename detail::fn_root<_Ty, 2>::type> sqrt(value const& a) {
+        static_assert(is_square<_Ty>::value, "Cannot take the square root of this unit.");
+        using std::sqrt;
+        return value<_Tx, typename detail::fn_root<_Ty, 2>::type>(sqrt(a._value));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //! Cube root
+    friend value<_Tx, typename detail::fn_root<_Ty, 3>::type> cbrt(value const& a) {
+        static_assert(is_cube<_Ty>::value, "Cannot take the cube root of this unit.");
+        using std::cbrt;
+        return value<_Tx, typename detail::fn_root<_Ty, 3>::type>(cbrt(a._value));
+    }
 };
 
 namespace detail {
@@ -690,32 +713,5 @@ struct fn_is_same<_Tx, _Ty, enable_if<units::is_unit<_Tx>::value && units::is_un
 } // namespace detail
 
 } // namespace mpl
-
-namespace std {
-
-////////////////////////////////////////////////////////////////////////////////
-//! Specialization for `std::abs`
-template<typename _Tx, typename _Ty>
-mpl::units::value<_Tx, _Ty> abs(mpl::units::value<_Tx, _Ty> const& a) {
-    return mpl::units::value<_Tx, _Ty>(abs((_Tx)a));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//! Specialization for `std::sqrt`
-template<typename _Tx, typename _Ty>
-mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type> sqrt(mpl::units::value<_Tx, _Ty> const& a) {
-    static_assert(mpl::units::is_square<_Ty>::value, "Cannot take the square root of this unit.");
-    return mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 2>::type>(sqrt((_Tx)a));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//! Specialization for `std::cbrt`
-template<typename _Tx, typename _Ty>
-mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type> cbrt(mpl::units::value<_Tx, _Ty> const& a) {
-    static_assert(mpl::units::is_cube<_Ty>::value, "Cannot take the cube root of this unit.");
-    return mpl::units::value<_Tx, typename mpl::units::detail::fn_root<_Ty, 3>::type>(cbrt((_Tx)a));
-}
-
-} // namespace std
 
 #endif //_mpl_units_h_
