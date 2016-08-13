@@ -177,25 +177,25 @@ pascals<float> exercise_1(meters_cubed<float> V,
     //
 
     //! Boiling point of nitrogen at 1 atmosphere
-    static const auto T_N = kelvin<float>(77.0f);
+    static constexpr auto T_N = kelvin<float>(77.0f);
     //! Room temperature
-    static const auto T_r = kelvin<float>(293.0f);
+    static constexpr auto T_r = kelvin<float>(293.0f);
 
     //! Density of liquid nitrogen
-    static const auto rho_N = kilograms_per_meter_cubed<float>(810.0f);
+    static constexpr auto rho_N = kilograms_per_meter_cubed<float>(810.0f);
     //! Density of metallic iron
-    static const auto rho_Fe = kilograms_per_meter_cubed<float>(7870.0f);
+    static constexpr auto rho_Fe = kilograms_per_meter_cubed<float>(7870.0f);
 
     //! Specific heat capacity of nitrogen gas
-    static const auto C_N = joules_per_mole_kelvin<float>(2.08f);
+    static constexpr auto C_N = joules_per_mole_kelvin<float>(2.08f);
     //! Specific heat capacity of metallic iron
-    static const auto C_Fe = joules_per_kilogram_kelvin<float>(449.0f);
+    static constexpr auto C_Fe = joules_per_kilogram_kelvin<float>(449.0f);
 
     //! Heap of vaporization of nitrogen
-    static const auto H_N = joules_per_kilogram<float>(1.99e5f);
+    static constexpr auto H_N = joules_per_kilogram<float>(1.99e5f);
 
     //! Molar mass of nitrogen gas
-    static const auto M_N = kilograms_per_mole<float>(2.80134e-2f);
+    static constexpr auto M_N = kilograms_per_mole<float>(2.80134e-2f);
 
     //
     // Derivation

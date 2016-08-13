@@ -388,14 +388,50 @@ class value {
     //! Default construction
     value() {}
 
+    //! Copy construction
+    constexpr value(value const& a)
+        : _value(a._value) {}
+
+    //! Move construction
+    constexpr value(value&& a)
+        : _value(a._value) {}
+
     //! Explicit construction from type
-    explicit value(type const& v)
+    explicit constexpr value(type const& v)
         : _value(v) {}
 
     //! Explicit construction from arguments
     template<typename... _Args>
-    explicit value(_Args&&... args)
+    explicit constexpr value(_Args&&... args)
         : _value(std::forward<_Args>(args)...) {}
+
+    //! Copy assignment
+    value& operator=(value const& a) {
+        _value = a._value;
+        return *this;
+    }
+
+    //! Move assignment
+    value& operator=(value&& a) {
+        _value = a._value;
+        return *this;
+    }
+
+    //! Copy assignment from value with equivalent units
+    template<typename _Tz, typename _Tw>
+    value& operator=(value<_Tz, _Tw> const& a) {
+        static_assert(is_same<unit, _Tw>::value, "Cannot assign to value with different units.");
+        _value = a._value;
+        return *this;
+    }
+
+    //! Move assignment from value with equivalent units
+    template<typename _Tz, typename _Tw>
+    value& operator=(value<_Tz, _Tw>&& a) {
+        static_assert(is_same<unit, _Tw>::value, "Cannot assign to value with different units.");
+        _value = a._value;
+        return *this;
+    }
 
     //! Implicit cast to type
     template<typename _Tw = _Ty>
