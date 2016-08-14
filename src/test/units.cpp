@@ -347,7 +347,8 @@ void test_operators(void) {
     ASSERT_SAME(decltype(x), decltype(h));
 
     ASSERT_SAME(decltype(x), decltype(i));
-    ASSERT_SAME(decltype(x)::type, decltype(j));
+    ASSERT_SAME(decltype(x)::type, decltype(j)::type);
+    ASSERT_SAME(mpl::nil, decltype(j)::unit);
 }
 
 void test_friend_operators(void) {
@@ -557,11 +558,12 @@ void test_units_multiplication(void) {
     auto g = c - d;
 
     ASSERT_SAME(mpl::units::si::joules, decltype(d)::unit);
+    ASSERT_SAME(mpl::nil,               decltype(e)::unit);
     ASSERT_SAME(mpl::units::si::joules, decltype(f)::unit);
     ASSERT_SAME(mpl::units::si::joules, decltype(g)::unit);
 
     ASSERT_SAME(double, decltype(d)::type);
-    ASSERT_SAME(double, decltype(e));
+    ASSERT_SAME(double, decltype(e)::type);
     ASSERT_SAME(double, decltype(f)::type);
     ASSERT_SAME(double, decltype(g)::type);
 }
@@ -580,7 +582,7 @@ void test_units_division(void) {
     ASSERT_SAME(mpl::units::si::watts, decltype(g)::unit);
 
     ASSERT_SAME(double, decltype(d)::type);
-    ASSERT_SAME(double, decltype(e));
+    ASSERT_SAME(double, decltype(e)::type);
     ASSERT_SAME(double, decltype(f)::type);
     ASSERT_SAME(double, decltype(g)::type);
 }
@@ -631,7 +633,8 @@ void test_division_with_base_conversion_to_dimensionless(void) {
     auto y = mpl::units::value<Y, mpl::units::si::joules>{};
     auto w = x / y;
 
-    ASSERT_SAME(W, decltype(w));
+    ASSERT_SAME(W, decltype(w)::type);
+    ASSERT_SAME(mpl::nil, decltype(w)::unit);
 }
 
 void test_division_with_equivalent_units(void) {
@@ -644,7 +647,8 @@ void test_division_with_equivalent_units(void) {
     ASSERT_SAME(std::false_type, a);
     ASSERT_SAME(mpl::true_type, b);
 
-    ASSERT_SAME(int, decltype(z));
+    ASSERT_SAME(int, decltype(z)::type);
+    ASSERT_SAME(mpl::nil, decltype(z)::unit);
 }
 
 void test_division_with_base_conversion_and_equivalent_units(void) {
@@ -657,7 +661,8 @@ void test_division_with_base_conversion_and_equivalent_units(void) {
     ASSERT_SAME(std::false_type, a);
     ASSERT_SAME(mpl::true_type, b);
 
-    ASSERT_SAME(W, decltype(w));
+    ASSERT_SAME(W, decltype(w)::type);
+    ASSERT_SAME(mpl::nil, decltype(w)::unit);
 }
 
 void test_implicit_conversion_with_equivalent_units(void) {

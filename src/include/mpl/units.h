@@ -654,10 +654,10 @@ struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<!is_same<_Ty, _Tw>::value>> {
 //! Division by same type
 template<typename _Tx, typename _Ty, typename _Tz, typename _Tw>
 struct divide<_Tx, _Ty, _Tz, _Tw, enable_if<is_same<_Ty, _Tw>::value>> {
-    using rtype = decltype(_Tx() / _Tz());
+    using rtype = value<decltype(_Tx() / _Tz()), nil>;
 
     static rtype func(value<_Tx, _Ty> const& lhs, value<_Tz, _Tw> const& rhs) {
-        return (_Tx)lhs / (_Tz)rhs;
+        return rtype((_Tx)lhs / (_Tz)rhs);
     }
 };
 
