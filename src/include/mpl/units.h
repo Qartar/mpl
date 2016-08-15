@@ -421,7 +421,7 @@ class value {
     template<typename _Tz, typename _Tw>
     value& operator=(value<_Tz, _Tw> const& a) {
         static_assert(is_same<unit, _Tw>::value, "Cannot assign to value with different units.");
-        _value = a._value;
+        _value = (_Tz)a;
         return *this;
     }
 
@@ -429,7 +429,7 @@ class value {
     template<typename _Tz, typename _Tw>
     value& operator=(value<_Tz, _Tw>&& a) {
         static_assert(is_same<unit, _Tw>::value, "Cannot assign to value with different units.");
-        _value = a._value;
+        _value = (_Tz)a;
         return *this;
     }
 
