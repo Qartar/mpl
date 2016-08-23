@@ -750,6 +750,44 @@ void test_equivalent_units(void) {
     ASSERT_SAME(bool, decltype(ge));
 }
 
+void test_unitless(void) {
+    auto x = mpl::units::value<int, mpl::nil>{};
+    auto y = int{};
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
+void test_unitless_friend(void) {
+    auto x = int{};
+    auto y = mpl::units::value<int, mpl::nil>{};
+
+    auto eq = (x == y);
+    auto ne = (x != y);
+    auto lt = (x <  y);
+    auto le = (x <= y);
+    auto gt = (x >  y);
+    auto ge = (x >= y);
+
+    ASSERT_SAME(bool, decltype(eq));
+    ASSERT_SAME(bool, decltype(ne));
+    ASSERT_SAME(bool, decltype(lt));
+    ASSERT_SAME(bool, decltype(le));
+    ASSERT_SAME(bool, decltype(gt));
+    ASSERT_SAME(bool, decltype(ge));
+}
+
 void test_base_types_with_same_units(void) {
     auto x = mpl::units::value<X, mpl::units::si::meters>{};
     auto y = mpl::units::value<Y, mpl::units::si::meters>{};

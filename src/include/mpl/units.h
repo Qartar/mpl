@@ -594,6 +594,18 @@ class value {
     decltype(_Tx() op _Tz()) operator op (value<_Tz, _Tw> const& a) const {     \
         static_assert(is_same<_Ty, _Tw>::value, "Cannot compare values with different units.");\
         return _value op (_Tz)a;                                                \
+    }                                                                           \
+                                                                                \
+    template<typename _Tz>                                                      \
+    decltype(_Tx() op _Tz()) operator op (_Tz const& a) const {                 \
+        static_assert(is_dimensionless<_Ty>::value, "Cannot compare values with different units.");\
+        return _value op a;                                                     \
+    }                                                                           \
+                                                                                \
+    template<typename _Tz>                                                      \
+    decltype(_Tz() op _Tx()) friend operator op (_Tz const& lhs, value const& rhs) {\
+        static_assert(is_dimensionless<_Ty>::value, "Cannot compare values with different units.");\
+        return lhs op (_Tx)rhs;                                                 \
     }
 
     //! Equality
