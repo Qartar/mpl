@@ -88,10 +88,10 @@ namespace reduce {
 namespace A {
 
 using _A = mpl::list<int, bool, float, double>;
-using _B = mpl::reduce<mpl::or, mpl::map<std::is_floating_point, _A>>;
-using _C = mpl::reduce<mpl::and, mpl::map<std::is_floating_point, _A>>;
-using _D = mpl::reduce<mpl::or, mpl::map<std::is_pointer, _A>>;
-using _E = mpl::reduce<mpl::and, mpl::map<std::is_fundamental, _A>>;
+using _B = mpl::reduce<mpl::or_, mpl::map<std::is_floating_point, _A>>;
+using _C = mpl::reduce<mpl::and_, mpl::map<std::is_floating_point, _A>>;
+using _D = mpl::reduce<mpl::or_, mpl::map<std::is_pointer, _A>>;
+using _E = mpl::reduce<mpl::and_, mpl::map<std::is_fundamental, _A>>;
 
 ASSERT_SAME(_B, mpl::true_type);
 ASSERT_SAME(_C, mpl::false_type);

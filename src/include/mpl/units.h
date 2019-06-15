@@ -99,8 +99,8 @@ struct fn_can_lower_unit<_Nx, cons<_Ty, _Tz>> {
     using lower = typename fn_lower<_Nx>::template func<_Ty>;
     using raise = typename fn_raise<_Nx>::template func<lower>;
 
-    using type = and<mpl::is_same<raise, _Ty>,
-                     typename fn_can_lower_unit<_Nx, _Tz>::type>;
+    using type = and_<mpl::is_same<raise, _Ty>,
+                      typename fn_can_lower_unit<_Nx, _Tz>::type>;
 };
 
 template<int _Nx>

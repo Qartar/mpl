@@ -45,7 +45,7 @@ struct fn_truth_type < _Tx, typename fn_enable_if < !_Tx::value >::type > {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//! Implementation of `and` metafunction
+//! Implementation of `and_` metafunction
 template<typename _Tx, typename _Ty, typename = void> struct fn_and;
 
 template<typename _Tx, typename _Ty>
@@ -59,7 +59,7 @@ struct fn_and < _Tx, _Ty, typename fn_enable_if < _Tx::value&& _Ty::value >::typ
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//! Implementation of `or` metafunction
+//! Implementation of `or_` metafunction
 template<typename _Tx, typename _Ty, typename = void> struct fn_or;
 
 template<typename _Tx, typename _Ty>
@@ -73,7 +73,7 @@ struct fn_or < _Tx, _Ty, typename fn_enable_if < _Tx::value || _Ty::value >::typ
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-//! Implementation of `not` metafunction
+//! Implementation of `not_` metafunction
 template<typename _Tx, typename = void> struct fn_not;
 
 template<typename _Tx>
@@ -152,7 +152,7 @@ template<typename _Tx> using truth_type = typename detail::fn_truth_type<_Tx>::t
  *
  * Evaluates to the opposite truth type of _Tx.
  */
-template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
+template<typename _Tx> using not_ = typename detail::fn_not<_Tx>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -163,7 +163,7 @@ template<typename _Tx> using not = typename detail::fn_not<_Tx>::type;
  *  0 | 0 0  Both arguments must evaluate to either true_type or false_type.
  *  1 | 0 1
  */
-template<typename _Tx, typename _Ty> using and = typename detail::fn_and<_Tx, _Ty>::type;
+template<typename _Tx, typename _Ty> using and_ = typename detail::fn_and<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -174,7 +174,7 @@ template<typename _Tx, typename _Ty> using and = typename detail::fn_and<_Tx, _T
  *  0 | 0 1  Both arguments must evaluate to either true_type or false_type.
  *  1 | 1 1
  */
-template<typename _Tx, typename _Ty> using or = typename detail::fn_or<_Tx, _Ty>::type;
+template<typename _Tx, typename _Ty> using or_ = typename detail::fn_or<_Tx, _Ty>::type;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -185,7 +185,7 @@ template<typename _Tx, typename _Ty> using or = typename detail::fn_or<_Tx, _Ty>
  *  0 | 1 1  Both arguments must evaluate to either true_type or false_type.
  *  1 | 1 0
  */
-template<typename _Tx, typename _Ty> using nand = not<and<_Tx, _Ty>>;
+template<typename _Tx, typename _Ty> using nand = not_<and_<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -196,7 +196,7 @@ template<typename _Tx, typename _Ty> using nand = not<and<_Tx, _Ty>>;
  *  0 | 1 0  Both arguments must evaluate to either true_type or false_type.
  *  1 | 0 0
  */
-template<typename _Tx, typename _Ty> using nor = not<or<_Tx, _Ty>>;
+template<typename _Tx, typename _Ty> using nor = not_<or_<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -207,7 +207,7 @@ template<typename _Tx, typename _Ty> using nor = not<or<_Tx, _Ty>>;
  *  0 | 0 1
  *  1 | 1 0  Both arguments must evaluate to either true_type or false_type.
  */
-template<typename _Tx, typename _Ty> using xor = and <or<_Tx, _Ty>, nand<_Tx, _Ty>>;
+template<typename _Tx, typename _Ty> using xor_ = and_ <or_<_Tx, _Ty>, nand<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -218,7 +218,7 @@ template<typename _Tx, typename _Ty> using xor = and <or<_Tx, _Ty>, nand<_Tx, _T
  *  0 | 1 0
  *  1 | 0 1  Both arguments must evaluate to either true_type or false_type.
  */
-template<typename _Tx, typename _Ty> using xnor = or <nor<_Tx, _Ty>, and<_Tx, _Ty>>;
+template<typename _Tx, typename _Ty> using xnor = or_ <nor<_Tx, _Ty>, and_<_Tx, _Ty>>;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
