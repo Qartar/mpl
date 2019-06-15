@@ -386,7 +386,7 @@ class value {
     using unit = _Ty;
 
     //! Default construction
-    value() {}
+    value() = default;
 
     //! Copy construction
     constexpr value(value const& a)
@@ -435,13 +435,13 @@ class value {
 
     //! Implicit cast to type
     template<typename _Tw = _Ty>
-    operator enable_if<is_dimensionless<_Tw>::value, _Tx> () const {
+    constexpr operator enable_if<is_dimensionless<_Tw>::value, _Tx> () const {
         return _value;
     }
 
     //! Explicit cast to type
     template<typename _Tw = _Ty>
-    explicit operator enable_if<!is_dimensionless<_Tw>::value, _Tx> () const {
+    constexpr explicit operator enable_if<!is_dimensionless<_Tw>::value, _Tx> () const {
         return _value;
     }
 
@@ -454,21 +454,21 @@ class value {
 
     //! Addition by unit type
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() + _Tz()), _Ty> operator+(value<_Tz, _Tw> const& a) const {
+    constexpr value<decltype(_Tx() + _Tz()), _Ty> operator+(value<_Tz, _Tw> const& a) const {
         static_assert(is_same<_Ty, _Tw>::value, "Cannot add values with different units.");
         return value<decltype(_Tx() + _Tz()), _Ty>(_value + (_Tz)a);
     }
 
     //! Subtraction by unit type
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() - _Tz()), _Ty> operator-(value<_Tz, _Tw> const& a) const {
+    constexpr value<decltype(_Tx() - _Tz()), _Ty> operator-(value<_Tz, _Tw> const& a) const {
         static_assert(is_same<_Ty, _Tw>::value, "Cannot subtract values with different units.");
         return value<decltype(_Tx() - _Tz()), _Ty>(_value - (_Tz)a);
     }
 
     //! Addition of scalar
     template<typename _Tz>
-    friend decltype(_Tz() + _Tx()) operator+(_Tz const& lhs, value<type, unit> const& rhs) {
+    constexpr friend decltype(_Tz() + _Tx()) operator+(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for addition of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
         return lhs + (_Tx)rhs;
@@ -476,7 +476,7 @@ class value {
 
     //! Subtraction of scalar
     template<typename _Tz>
-    friend decltype(_Tz() - _Tx()) operator-(_Tz const& lhs, value<type, unit> const& rhs) {
+    constexpr friend decltype(_Tz() - _Tx()) operator-(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for subtraction of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
         return lhs - (_Tx)rhs;
@@ -484,28 +484,28 @@ class value {
 
     //! Multiplication by scalar
     template<typename _Tz>
-    value<decltype(_Tx() * _Tz()), unit> operator*(_Tz const& s) const {
+    constexpr value<decltype(_Tx() * _Tz()), unit> operator*(_Tz const& s) const {
         static_assert(!is_unit<_Tz>::value, "This method is for multiplication by scalar types only.");
         return value<decltype(_Tx() * _Tz()), unit>(_value * s);
     }
 
     //! Division by scalar
     template<typename _Tz>
-    value<decltype(_Tx() / _Tz()), unit> operator/(_Tz const& s) const {
+    constexpr value<decltype(_Tx() / _Tz()), unit> operator/(_Tz const& s) const {
         static_assert(!is_unit<_Tz>::value, "This method is for division by scalar types only.");
         return value<decltype(_Tx() / _Tz()), unit>(_value / s);
     }
 
     //! Multiplication of scalar
     template<typename _Tz>
-    friend value<decltype(_Tz() * _Tx()), unit> operator*(_Tz const& lhs, value<type, unit> const& rhs) {
+    constexpr friend value<decltype(_Tz() * _Tx()), unit> operator*(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for multiplication of scalar types only.");
         return value<decltype(_Tz() * _Tx()), unit>(lhs * rhs._value);
     }
 
     //! Division of scalar
     template<typename _Tz>
-    friend value<decltype(_Tz() / _Tx()), reciprocal<unit>> operator/(_Tz const& lhs, value<type, unit> const& rhs) {
+    constexpr friend value<decltype(_Tz() / _Tx()), reciprocal<unit>> operator/(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for division of scalar types only.");
         return value<decltype(_Tz() / _Tx()), reciprocal<unit>>(lhs / rhs._value);
     }
@@ -555,13 +555,13 @@ class value {
     }
 
     //! Negation
-    value<type, unit> operator-() const {
+    constexpr value<type, unit> operator-() const {
         return value<type, unit>(-_value);
     }
 
     //! Multiplication by unit type
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>> operator*(value<_Tz, _Tw> const& a) const {
+    constexpr value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>> operator*(value<_Tz, _Tw> const& a) const {
         return value<decltype(_Tx() * _Tz()), product<_Ty, _Tw>>(_value * (_Tz)a);
     }
 
@@ -576,14 +576,14 @@ class value {
 
     //! Bitwise XOR operator by unit type
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() ^ _Tz()), product<_Ty, _Tw>> operator^(value<_Tz, _Tw> const& a) const {
+    constexpr value<decltype(_Tx() ^ _Tz()), product<_Ty, _Tw>> operator^(value<_Tz, _Tw> const& a) const {
         static_assert(!std::is_integral<_Tx>::value, "Cannot use Bitwise XOR operator on integral types with different units.");
         return value<decltype(_Tx() ^ _Tz()), product<unit, _Tw>>(_value ^ (_Tz)a);
     }
 
     //! Remainder operator by unit type
     template<typename _Tz, typename _Tw>
-    value<decltype(_Tx() % _Tz()), product<_Ty, _Tw>> operator%(value<_Tz, _Tw> const& a) const {
+    constexpr value<decltype(_Tx() % _Tz()), product<_Ty, _Tw>> operator%(value<_Tz, _Tw> const& a) const {
         static_assert(!std::is_integral<_Tx>::value, "Cannot use remainder operator on integral types with different units.");
         return value<decltype(_Tx() % _Tz()), product<unit, _Tw>>(_value % (_Tz)a);
     }
@@ -591,19 +591,19 @@ class value {
     //! Relational operator helper
 #define RELATIONAL(op)                                                          \
     template<typename _Tz, typename _Tw>                                        \
-    decltype(_Tx() op _Tz()) operator op (value<_Tz, _Tw> const& a) const {     \
+    constexpr decltype(_Tx() op _Tz()) operator op (value<_Tz, _Tw> const& a) const {\
         static_assert(is_same<_Ty, _Tw>::value, "Cannot compare values with different units.");\
         return _value op (_Tz)a;                                                \
     }                                                                           \
                                                                                 \
     template<typename _Tz>                                                      \
-    decltype(_Tx() op _Tz()) operator op (_Tz const& a) const {                 \
+    constexpr decltype(_Tx() op _Tz()) operator op (_Tz const& a) const {       \
         static_assert(is_dimensionless<_Ty>::value, "Cannot compare values with different units.");\
         return _value op a;                                                     \
     }                                                                           \
                                                                                 \
     template<typename _Tz>                                                      \
-    decltype(_Tz() op _Tx()) friend operator op (_Tz const& lhs, value const& rhs) {\
+    constexpr decltype(_Tz() op _Tx()) friend operator op (_Tz const& lhs, value const& rhs) {\
         static_assert(is_dimensionless<_Ty>::value, "Cannot compare values with different units.");\
         return lhs op (_Tx)rhs;                                                 \
     }
