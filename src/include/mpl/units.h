@@ -394,7 +394,7 @@ class value {
 
     //! Move construction
     constexpr value(value&& a)
-        : _value(a._value) {}
+        : _value(std::move(a._value)) {}
 
     //! Explicit construction from type
     explicit constexpr value(type const& v)
@@ -413,7 +413,7 @@ class value {
 
     //! Move assignment
     value& operator=(value&& a) {
-        _value = a._value;
+        _value = std::move(a._value);
         return *this;
     }
 

@@ -317,6 +317,22 @@ namespace value {
 //------------------------------------------------------------------------------
 namespace test_no_conversion {
 
+void test_nocopy(void) {
+    struct nocopy {
+        nocopy() = default;
+        nocopy(nocopy&&) = default;
+        nocopy(nocopy const&) = delete;
+        nocopy& operator=(nocopy&&) = default;
+        nocopy& operator=(nocopy const&) = delete;
+        ~nocopy() = default;
+    };
+
+    auto x = mpl::units::value<nocopy, mpl::units::si::meters>();
+    auto y = mpl::units::value<nocopy, mpl::units::si::meters>();
+    auto z = std::move(x); // move constructor
+    z = std::move(y); // move assignment
+}
+
 void test_operators(void) {
     auto x = mpl::units::value<int, mpl::units::si::meters>(1);
     auto y = mpl::units::value<int, mpl::units::si::meters>(2);
