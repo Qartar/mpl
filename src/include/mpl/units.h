@@ -471,7 +471,7 @@ class value {
     constexpr friend decltype(_Tz() + _Tx()) operator+(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for addition of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
-        return lhs + (_Tx)rhs;
+        return lhs + rhs._value;
     }
 
     //! Subtraction of scalar
@@ -479,7 +479,23 @@ class value {
     constexpr friend decltype(_Tz() - _Tx()) operator-(_Tz const& lhs, value<type, unit> const& rhs) {
         static_assert(!is_unit<_Tz>::value, "This method is for subtraction of scalar types only.");
         static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
-        return lhs - (_Tx)rhs;
+        return lhs - rhs._value;
+    }
+
+    //! Addition by scalar
+    template<typename _Tz>
+    constexpr decltype(_Tx() + _Tz()) operator+(_Tz const& a) const {
+        static_assert(!is_unit<_Tz>::value, "This method is for addition of scalar types only.");
+        static_assert(is_same<_Ty, nil>::value, "Cannot add values with different units.");
+        return _value + a;
+    }
+
+    //! Subtraction by scalar
+    template<typename _Tz>
+    constexpr decltype(_Tx() - _Tz()) operator-(_Tz const& a) const {
+        static_assert(!is_unit<_Tz>::value, "This method is for subtraction of scalar types only.");
+        static_assert(is_same<_Ty, nil>::value, "Cannot subtract values with different units.");
+        return _value - a;
     }
 
     //! Multiplication by scalar

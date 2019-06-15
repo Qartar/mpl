@@ -505,7 +505,24 @@ void test_implicit_scalar_cast(void) {
     int64_t h = d; (void)h;
 }
 
-void test_implicit_scalar_addition(void) {
+void test_implicit_scalar_addition_lhs(void) {
+    auto a = mpl::units::value<float, mpl::nil>(1.0f);
+    auto b = mpl::units::value<double, mpl::nil>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::nil>(1);
+    auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
+
+    auto e = a + 1.0f;
+    auto f = b + 1.0;
+    auto g = c + 1;
+    auto h = d + 1ll;
+
+    ASSERT_SAME(float, decltype(e));
+    ASSERT_SAME(double, decltype(f));
+    ASSERT_SAME(int32_t, decltype(g));
+    ASSERT_SAME(int64_t, decltype(h));
+}
+
+void test_implicit_scalar_addition_rhs(void) {
     auto a = mpl::units::value<float, mpl::nil>(1.0f);
     auto b = mpl::units::value<double, mpl::nil>(1.0);
     auto c = mpl::units::value<int32_t, mpl::nil>(1);
@@ -532,7 +549,24 @@ void test_implicit_scalar_addition(void) {
     ASSERT_SAME(int64_t, decltype(l));
 }
 
-void test_implicit_scalar_subtraction(void) {
+void test_implicit_scalar_subtraction_lhs(void) {
+    auto a = mpl::units::value<float, mpl::nil>(1.0f);
+    auto b = mpl::units::value<double, mpl::nil>(1.0);
+    auto c = mpl::units::value<int32_t, mpl::nil>(1);
+    auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
+
+    auto e = a - 1.0f;
+    auto f = b - 1.0;
+    auto g = c - 1;
+    auto h = d - 1ll;
+
+    ASSERT_SAME(float, decltype(e));
+    ASSERT_SAME(double, decltype(f));
+    ASSERT_SAME(int32_t, decltype(g));
+    ASSERT_SAME(int64_t, decltype(h));
+}
+
+void test_implicit_scalar_subtraction_rhs(void) {
     auto a = mpl::units::value<float, mpl::nil>(1.0f);
     auto b = mpl::units::value<double, mpl::nil>(1.0);
     auto c = mpl::units::value<int32_t, mpl::nil>(1);
