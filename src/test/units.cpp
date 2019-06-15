@@ -483,10 +483,10 @@ void test_implicit_scalar_cast(void) {
     auto c = mpl::units::value<int32_t, mpl::nil>(1);
     auto d = mpl::units::value<int64_t, mpl::nil>(1ll);
 
-    float   e = a;
-    double  f = b;
-    int32_t g = c;
-    int64_t h = d;
+    float   e = a; (void)e;
+    double  f = b; (void)f;
+    int32_t g = c; (void)g;
+    int64_t h = d; (void)h;
 }
 
 void test_implicit_scalar_addition(void) {
