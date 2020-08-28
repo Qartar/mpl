@@ -60,14 +60,14 @@ newtons<float> exercise_1(kilograms<float> m_a,
      */
 
     //! Gravitational force on A
-    auto Fa_g = m_a * g<float>();
+    auto Fa_g = m_a * g<float>;
     //! Normal force on A
     auto Fa_N = Fa_g;
     //! Force of friction on A from B
     auto Fa_f = mu_1 * Fa_N;
 
     //! Gravitational force on B
-    auto Fb_g = m_b * g<float>();
+    auto Fb_g = m_b * g<float>;
     //! Normal force on B
     auto Fb_N = Fb_g + Fa_N;
     //! Force of friction on B from ground
@@ -114,14 +114,14 @@ meters_per_second_squared<float> exercise_2(kilograms<float> m_a,
      */
 
     //! Gravitational force on A
-    auto Fa_g = m_a * g<float>();
+    auto Fa_g = m_a * g<float>;
     //! Normal force on A
     auto Fa_N = Fa_g;
     //! Force of friction on A from B
     auto Fa_f = mu_1 * Fa_N;
 
     //! Gravitational force on B
-    auto Fb_g = m_b * g<float>();
+    auto Fb_g = m_b * g<float>;
     //! Normal force on B
     auto Fb_N = Fb_g + Fa_N;
     //! Force of friction on B from ground
@@ -216,7 +216,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         //! Quantity of boiled nitrogen
         auto mol_Nb = m_N / M_N;
         //! Initial quantity of nitrogen gas (using PV = nRT)
-        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float>() * T_r);
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_r);
         //! Final volume of liquid nitrogen
         auto V_f = V_l * (1.0f - E / L);
         //! Volume of the iron object
@@ -225,7 +225,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         auto V_gas = V - V_f - V_Fe;
 
         //! Final pressure in the container
-        return ((mol_N0 + mol_Nb) * R<float>() * T_f) / V_gas;
+        return ((mol_N0 + mol_Nb) * R<float> * T_f) / V_gas;
     }
     // All of the nitrogen boils.
     else {
@@ -235,7 +235,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         //! Quantity of boiled nitrogen
         auto mol_Nb = m_N / M_N;
         //! Initial quantity of nitrogen gas (using PV = nRT)
-        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float>() * T_r);
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_r);
         //! Volume of the iron object
         auto V_Fe = m_Fe / rho_Fe;
         //! Final volume of nitrogen gas
@@ -247,7 +247,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         auto T_f = T_r + (E - L) / C;
 
         //! Final pressure in the container
-        return ((mol_N0 + mol_Nb) * R<float>() * T_f) / V_gas;
+        return ((mol_N0 + mol_Nb) * R<float> * T_f) / V_gas;
     }
 }
 

@@ -27,7 +27,7 @@ template<typename T> using kilograms_per_meter_cubed = decltype(kilograms<T>{} /
 template<typename T> using kilograms_per_mole = decltype(kilograms<T>{} / moles<T>{});
 
 //! Gravitational constant
-template<typename T> using meters_cubed_per_kilogram_seconds_squared = void;
+template<typename T> using meters_cubed_per_kilogram_seconds_squared = decltype(meters_cubed<T>{} / kilograms<T>{} / seconds<T>{} / seconds<T>{});
 //! Magnetic permeability
 template<typename T> using newtons_per_ampere_squared = decltype(newtons<T>{} / amperes<T>{} / amperes<T>{});
 //! Thermal capacity, entropy
