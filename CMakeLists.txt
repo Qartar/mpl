@@ -9,13 +9,6 @@ target_include_directories(mpl
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-    target_compile_options(mpl
-        INTERFACE
-            -fno-operator-names
-    )
-endif()
-
 add_library(mpl_test STATIC
     src/include/mpl/cons.h
     src/include/mpl/functional.h
@@ -38,3 +31,10 @@ add_library(mpl_test STATIC
 )
 
 target_link_libraries(mpl_test mpl)
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+    target_compile_options(mpl_test
+        PRIVATE
+            -Wno-unused-function
+    )
+endif()
