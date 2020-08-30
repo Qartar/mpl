@@ -216,7 +216,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         //! Quantity of boiled nitrogen
         auto mol_Nb = m_N / M_N;
         //! Initial quantity of nitrogen gas (using PV = nRT)
-        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_r);
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_N);
         //! Final volume of liquid nitrogen
         auto V_f = V_l * (1.0f - E / L);
         //! Volume of the iron object
@@ -235,7 +235,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         //! Quantity of boiled nitrogen
         auto mol_Nb = m_N / M_N;
         //! Initial quantity of nitrogen gas (using PV = nRT)
-        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_r);
+        auto mol_N0 = (pascals<float>(101325.f) * (V - V_l)) / (R<float> * T_N);
         //! Volume of the iron object
         auto V_Fe = m_Fe / rho_Fe;
         //! Final volume of nitrogen gas
@@ -244,7 +244,7 @@ pascals<float> exercise_1(meters_cubed<float> V,
         //! Thermal capacity of the system
         auto C = (mol_Nb + mol_N0) * C_N + m_Fe * C_Fe;
         //! Final equilibrium temperature.
-        auto T_f = T_r + (E - L) / C;
+        auto T_f = T_N + (E - L) / C;
 
         //! Final pressure in the container
         return ((mol_N0 + mol_Nb) * R<float> * T_f) / V_gas;
